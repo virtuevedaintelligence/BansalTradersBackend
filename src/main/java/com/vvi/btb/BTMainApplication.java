@@ -1,13 +1,13 @@
-package com.virtueveda.bansaltradersbackend;
+package com.vvi.btb;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class BansalTradersMainApplication {
+public class BTMainApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(BansalTradersMainApplication.class, args);
+		SpringApplication.run(BTMainApplication.class, args);
 	}
 
 }
