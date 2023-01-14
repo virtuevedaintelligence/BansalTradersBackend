@@ -30,9 +30,9 @@ public class Invoice {
     @OneToOne
     @JoinColumn(name = "order_id", nullable = false)
     private Order order;
-
-    @OneToMany(mappedBy = "invoice", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval=true)
-    private List<Product> products;
+//
+//    @OneToMany(mappedBy = "invoice", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval=true)
+//    private List<Product> products;
 
     @OneToOne
     @JoinColumn(name = "user_id", nullable = false)

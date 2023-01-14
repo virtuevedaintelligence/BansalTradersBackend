@@ -9,4 +9,5 @@ public class CategoryImplConstant {
     public static final String  CATEGORY_CREATE_ERROR_MESSAGE = " Exception while Creating Category";
     public static final String CATEGORY_UPDATE_ERROR_MESSAGE =" Exception while Updating Category";
     public static final String CATEGORY_DELETE_ERROR_MESSAGE =" Exception while Deleting Category";
+    public static final String CATEGORY_NOT_FOUND = " Category not Found";
 }

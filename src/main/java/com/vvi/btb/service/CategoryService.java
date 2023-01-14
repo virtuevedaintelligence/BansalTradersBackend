@@ -1,8 +1,8 @@
 package com.vvi.btb.service;
 
-import com.vvi.btb.domain.response.CategoryRequest;
+import com.vvi.btb.domain.request.CategoryRequest;
 import com.vvi.btb.domain.response.CategoryResponse;
-import com.vvi.btb.exception.category.CategoryException;
+import com.vvi.btb.exception.domain.CategoryException;
 
 import java.util.List;
 

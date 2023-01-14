@@ -1,4 +1,4 @@
-package com.vvi.btb.domain.response;
+package com.vvi.btb.domain.request;
 
 import lombok.Data;
 

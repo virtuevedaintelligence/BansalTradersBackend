@@ -14,7 +14,7 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(nullable = false, updatable = false)
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    private int id;
+    private Long id;
 
     private String productName;
 
@@ -24,7 +24,7 @@ public class Product {
 
     private int productPrice;
 
-    private String quantity; // 10 packets 20 packets
+    private int quantity; // 10 packets 20 packets
 
     private int weight; // 250gm 500gm
 
@@ -37,8 +37,8 @@ public class Product {
     @ManyToOne
     @JoinColumn(name = "category_id", nullable=false)
     private Category category;
-    @ManyToOne
-    @JoinColumn(name = "invoice_id", nullable=false)
-    private Invoice invoice;
+//    @ManyToOne
+//    @JoinColumn(name = "invoice_id", nullable=false)
+//    private Invoice invoice;
 }
 

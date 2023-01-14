@@ -2,15 +2,12 @@ package com.vvi.btb.service.impl;
 
 import com.vvi.btb.constant.CategoryImplConstant;
 import com.vvi.btb.domain.entity.Category;
-import com.vvi.btb.domain.response.CategoryRequest;
+import com.vvi.btb.domain.request.CategoryRequest;
 import com.vvi.btb.domain.response.CategoryResponse;
-import com.vvi.btb.exception.category.CategoryException;
+import com.vvi.btb.exception.domain.CategoryException;
 import com.vvi.btb.repo.CategoryDao;
 import com.vvi.btb.service.CategoryService;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -18,13 +15,16 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-@AllArgsConstructor
-@NoArgsConstructor
 @Slf4j
 public class CategoryServiceImpl implements CategoryService {
 
-    @Autowired
+
     private CategoryDao categoryDao;
+
+    public CategoryServiceImpl(CategoryDao categoryDao) {
+        this.categoryDao = categoryDao;
+    }
+
 
     @Override
     public CategoryResponse saveCategory(CategoryRequest categoryRequest) throws CategoryException {
@@ -86,7 +86,7 @@ public class CategoryServiceImpl implements CategoryService {
             categoryResponse.setCategoryName(category.get().getCategoryName());
         }
         else {
-            log.info("Category not Found");
+            log.info(CategoryImplConstant.CATEGORY_NOT_FOUND);
         }
         return categoryResponse;
     }

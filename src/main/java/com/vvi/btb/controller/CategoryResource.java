@@ -2,13 +2,10 @@ package com.vvi.btb.controller;
 
 
 import com.vvi.btb.domain.HttpResponse;
-import com.vvi.btb.domain.response.CategoryRequest;
+import com.vvi.btb.domain.request.CategoryRequest;
 import com.vvi.btb.domain.response.CategoryResponse;
-import com.vvi.btb.exception.category.CategoryException;
+import com.vvi.btb.exception.domain.CategoryException;
 import com.vvi.btb.service.CategoryService;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,15 +17,14 @@ import static com.vvi.btb.constant.CategoryImplConstant.PLEASE_CONTACT_ADMIN;
 import static org.springframework.http.HttpStatus.OK;
 
 @RestController
-@AllArgsConstructor
-@NoArgsConstructor
 @RequestMapping("/v1/categories")
 public class CategoryResource {
-
-    @Autowired
     private CategoryService categoryService;
+    public CategoryResource(CategoryService categoryService) {
+        this.categoryService = categoryService;
+    }
 
-    @PostMapping("/create_category")
+    @PostMapping("/createCategory")
     public ResponseEntity<CategoryResponse> createCategory(@RequestBody CategoryRequest categoryRequest) throws CategoryException {
         CategoryResponse category = categoryService.getCategoryByName(categoryRequest.getCategoryName());
         if(category != null){
@@ -38,7 +34,7 @@ public class CategoryResource {
         return new ResponseEntity<>(categoryResponse, OK);
     }
 
-    @PutMapping("/update_category/{id}")
+    @PutMapping("/updateCategory/{id}")
     public ResponseEntity<Object> updateCategory(@PathVariable("id") long id, @RequestBody CategoryRequest category) throws CategoryException {
         CategoryResponse categoryResponse = categoryService.updateCategory(id, category);
         if(categoryResponse == null){
