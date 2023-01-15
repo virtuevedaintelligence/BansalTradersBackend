@@ -16,6 +16,7 @@ import static com.vvi.btb.constant.CategoryImplConstant.CATEGORY_DELETED_SUCCESS
 import static com.vvi.btb.constant.CategoryImplConstant.PLEASE_CONTACT_ADMIN;
 import static org.springframework.http.HttpStatus.OK;
 
+@CrossOrigin("*")
 @RestController
 @RequestMapping("/v1/categories")
 public class CategoryResource {
