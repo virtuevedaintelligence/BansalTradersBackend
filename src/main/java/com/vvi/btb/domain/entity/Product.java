@@ -29,6 +29,7 @@ public class Product {
     private int weight; // 250gm 500gm
 
     private boolean isFeatured;
+    private int averageRating;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval=true)
     List<Order> orders;
