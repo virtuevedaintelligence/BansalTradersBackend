@@ -30,6 +30,7 @@ public class Product {
 
     private boolean isFeatured;
     private int averageRating;
+    private boolean isActive;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval=true)
     List<Order> orders;
