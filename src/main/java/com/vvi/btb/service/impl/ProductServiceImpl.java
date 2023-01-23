@@ -113,6 +113,7 @@ public class ProductServiceImpl implements ProductService {
         productResponse.setQuantity(savedProduct.getQuantity());
         productResponse.setProductPrice(savedProduct.getProductPrice());
         productResponse.setFeatured(savedProduct.isFeatured());
+        productResponse.setActive(savedProduct.isActive());
         productResponse.setCategoryName(savedProduct.getCategory().getCategoryName());
         return productResponse;
     }
@@ -129,6 +130,7 @@ public class ProductServiceImpl implements ProductService {
         prod.setProductDescription(productRequest.getProductDescription());
         prod.setQuantity(productRequest.getQuantity());
         prod.setFeatured(productRequest.isFeatured());
+        prod.setActive(productRequest.isActive());
         Optional<Category> category = categoryDao.findByCategoryName(productRequest.getCategoryName());
         if(category.isPresent()){
             prod.setCategory(category.get());

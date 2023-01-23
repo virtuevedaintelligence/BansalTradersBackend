@@ -1,6 +1,5 @@
 package com.vvi.btb.domain.request;
 
-import lombok.Builder;
 import lombok.Data;
 
 @Data
@@ -12,5 +11,6 @@ public class ProductRequest {
     private int quantity; // 10 packets 20 packets
     private int weight; // 250gm 500gm
     private boolean isFeatured;
+    private boolean isActive;
     private String categoryName;
 }

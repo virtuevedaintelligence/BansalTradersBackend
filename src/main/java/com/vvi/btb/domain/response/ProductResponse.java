@@ -18,5 +18,6 @@ public class ProductResponse {
     private int quantity; // 10 packets 20 packets
     private int weight; // 250gm 500gm
     private boolean isFeatured;
+    private boolean isActive;
     private String categoryName;
 }
