@@ -8,6 +8,7 @@ import com.vvi.btb.domain.response.ProductResponse;
 import com.vvi.btb.exception.domain.CategoryException;
 import com.vvi.btb.exception.domain.ProductException;
 import com.vvi.btb.service.ProductService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.ReflectionUtils;
@@ -22,16 +23,17 @@ import static org.springframework.http.HttpStatus.OK;
 @CrossOrigin("*")
 @RestController
 @RequestMapping("/v1/products")
+@Slf4j
 public class ProductResource {
-
     private final ProductService productService;
-
     public ProductResource(ProductService productService) {
         this.productService = productService;
     }
 
     @PostMapping("/createProduct")
-    public ResponseEntity<ProductResponse> createProduct(@RequestBody ProductRequest productRequest) throws ProductException, CategoryException {
+    public ResponseEntity<ProductResponse> createProduct(@RequestBody ProductRequest productRequest)
+            throws ProductException, CategoryException {
+        log.info(productRequest.toString());
         ProductResponse product = productService.getProductByName(productRequest.getProductName());
         if(product != null){
             return new ResponseEntity<>(product, HttpStatus.CONFLICT);
@@ -43,6 +45,7 @@ public class ProductResource {
     @PutMapping("/updateProduct/{productId}")
     public ResponseEntity<ProductResponse> updateProduct(@PathVariable("productId") Long productId,
                                                          @RequestBody ProductRequest productRequest) throws ProductException, CategoryException {
+
         ProductResponse product = productService.getProductDetail(productId);
         if (product == null) {
             return new ResponseEntity<>(product, HttpStatus.NOT_FOUND);
@@ -53,7 +56,6 @@ public class ProductResource {
         }
         return new ResponseEntity<>(productResponse, OK);
     }
-
     @PatchMapping("/patchProduct/{productId}")
     public ResponseEntity<ProductResponse> updatePatchProduct(@PathVariable("productId") Long productId,
                                                              @RequestBody Map<String,Object> fields) throws ProductException, CategoryException {
@@ -104,7 +106,8 @@ public class ProductResource {
         productRequest.setProductName(productResponse.getProductName());
         productRequest.setProductPrice(productResponse.getProductPrice());
         productRequest.setQuantity(productResponse.getQuantity());
-        productRequest.setFeatured(productResponse.isFeatured());
+        productRequest.setFeatured(productResponse.isFeatured() ? "true" : "false");
+        productRequest.setIsactive(productResponse.isActive() ? "true" : "false");
         productRequest.setWeight(productResponse.getWeight());
         productRequest.setCategoryName(productResponse.getCategoryName());
         productRequest.setProductImageUrl(productResponse.getProductImageUrl());

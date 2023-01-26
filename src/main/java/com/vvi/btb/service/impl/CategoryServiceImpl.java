@@ -86,7 +86,7 @@ public class CategoryServiceImpl implements CategoryService {
             categoryResponse.setCategoryName(category.get().getCategoryName());
         }
         else {
-            log.info(CategoryImplConstant.CATEGORY_NOT_FOUND);
+            log.info(CategoryImplConstant.CATEGORY_ALREADY_EXISTS);
         }
         return categoryResponse;
     }

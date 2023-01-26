@@ -79,12 +79,16 @@ public class ProductServiceImpl implements ProductService {
         Optional<Product> product = productDao.findByProductName(productName);
         ProductResponse productResponse = null;
         if(product.isPresent()){
+            productResponse.setProductId(product.get().getId());
             productResponse.setProductName(product.get().getProductName());
             productResponse.setProductDescription(product.get().getProductDescription());
             productResponse.setProductPrice(product.get().getProductPrice());
             productResponse.setWeight(product.get().getWeight());
             productResponse.setQuantity(product.get().getQuantity());
             productResponse.setFeatured(product.get().isFeatured());
+            productResponse.setProductImageUrl(product.get().getProductImageUrl());
+            productResponse.setCategoryName(product.get().getCategory().getCategoryName());
+            productResponse.setActive(product.get().isActive());
         }
         else {
             log.info(ProductImplConstant.PRODUCT_NOT_FOUND);
@@ -129,8 +133,7 @@ public class ProductServiceImpl implements ProductService {
         prod.setWeight(productRequest.getWeight());
         prod.setProductDescription(productRequest.getProductDescription());
         prod.setQuantity(productRequest.getQuantity());
-        prod.setFeatured(productRequest.isFeatured());
-        prod.setActive(productRequest.isActive());
+        setFeaturedAndActive(productRequest, prod);
         Optional<Category> category = categoryDao.findByCategoryName(productRequest.getCategoryName());
         if(category.isPresent()){
             prod.setCategory(category.get());
@@ -138,5 +141,18 @@ public class ProductServiceImpl implements ProductService {
             throw new CategoryException(CategoryImplConstant.CATEGORY_NOT_FOUND, CategoryImplConstant.PLEASE_CONTACT_ADMIN);
         }
         return prod;
+    }
+
+    private void setFeaturedAndActive(ProductRequest productRequest, Product prod) {
+        if(productRequest.getIsactive().equals("on")){
+            prod.setActive(true);
+        }else{
+            prod.setActive(false);
+        }
+        if(productRequest.getFeatured().equals("on")){
+            prod.setFeatured(true);
+        }else{
+            prod.setFeatured(false);
+        }
     }
 }

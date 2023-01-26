@@ -20,4 +20,5 @@ public class ProductResponse {
     private boolean isFeatured;
     private boolean isActive;
     private String categoryName;
+    private int avgStarRating;
 }
