@@ -13,7 +13,7 @@ public record ProductResponse(
      boolean isFeatured,
      boolean isActive,
      String categoryName,
-     int avgStarRating,
+     String avgStarRating,
      List<RatingResponse> ratingResponse
     ){
 }

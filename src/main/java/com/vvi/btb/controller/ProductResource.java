@@ -19,6 +19,7 @@ import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
 
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.OK;
 
 @CrossOrigin("*")
@@ -46,22 +47,23 @@ public class ProductResource {
     }
 
     @PutMapping("/updateProduct/{productId}")
-    public ResponseEntity<ProductResponse> updateProduct(@PathVariable("productId") Long productId,
+    public ResponseEntity<HttpResponse> updateProduct(@PathVariable("productId") Long productId,
                                                          @RequestBody ProductRequest productRequest)
             throws ProductException, CategoryException {
 
         ProductResponse product = productService.getProductDetail(productId);
         if (product == null) {
-            return new ResponseEntity<>(product, HttpStatus.NOT_FOUND);
+            return  response.response(OK, ProductImplConstant.PRODUCT_ALREADY_EXISTS,product);
         }
         ProductResponse productResponse = productService.updateProduct(productId,productRequest);
         if (productResponse == null) {
-            return new ResponseEntity<>(productResponse, HttpStatus.NOT_FOUND);
+            return  response.response(OK, ProductImplConstant.PRODUCT_UPDATE_ERROR_MESSAGE,productResponse);
         }
-        return new ResponseEntity<>(productResponse, OK);
+        return response.response(OK, ProductImplConstant.PRODUCT_UPDATED_SUCCESSFULLY,productResponse);
     }
+    /*
     @PatchMapping("/patchProduct/{productId}")
-    public ResponseEntity<ProductResponse> updatePatchProduct(@PathVariable("productId") Long productId,
+    public ResponseEntity<HttpResponse> updatePatchProduct(@PathVariable("productId") Long productId,
                                                              @RequestBody Map<String,Object> fields) throws ProductException, CategoryException {
         ProductResponse product = productService.getProductDetail(productId);
         if (product == null) {
@@ -77,8 +79,10 @@ public class ProductResource {
         if (productResponse == null) {
             return new ResponseEntity<>(productResponse, HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(productResponse, OK);
+        return response.response(OK, ProductImplConstant.PRODUCT_ADDED_SUCCESSFULLY,productResponse);
     }
+    */
+
 
     @DeleteMapping("/delete/{productId}")
     public ResponseEntity<HttpResponse> deleteProduct(@PathVariable("productId") Long productId) throws ProductException {
@@ -87,12 +91,12 @@ public class ProductResource {
     }
 
     @GetMapping("/productDetail/{productId}")
-    public ResponseEntity<ProductResponse> getProductDetail(@PathVariable ("productId") Long productId) throws ProductException{
+    public ResponseEntity<HttpResponse> getProductDetail(@PathVariable ("productId") Long productId) throws ProductException{
         ProductResponse productDetail = productService.getProductDetail(productId);
         if(productDetail == null){
-            return new ResponseEntity<>(productDetail, HttpStatus.NOT_FOUND);
+            return  response.response(NOT_FOUND, ProductImplConstant.PRODUCT_NOT_FOUND,productDetail);
         }
-        return new ResponseEntity<>(productDetail, OK);
+        return  response.response(OK, ProductImplConstant.PRODUCT_FETCHED_SUCESSFULLY,productDetail);
     }
 
     @GetMapping
@@ -114,7 +118,15 @@ public class ProductResource {
         productRequest.setProductImageUrl(productResponse.getProductImageUrl());
         return productRequest;
     }
-     */
+    */
 
+    @GetMapping("/productRating/{productId}")
+    public ResponseEntity<HttpResponse> getProductRatings(@PathVariable ("productId") Long productId) throws ProductException {
+        ProductResponse productDetail = productService.getProductDetail(productId);
+        if(productDetail == null){
+            return response.response(NOT_FOUND, ProductImplConstant.PRODUCT_NOT_FOUND,productDetail);
+        }
+        return response.response(OK,ProductImplConstant.PRODUCT_FETCHED_SUCESSFULLY, productService.getProductRatings(productDetail));
+    }
 
 }

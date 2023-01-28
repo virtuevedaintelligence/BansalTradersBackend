@@ -6,7 +6,10 @@ import com.vvi.btb.domain.entity.Category;
 import com.vvi.btb.domain.entity.Product;
 import com.vvi.btb.domain.mapper.ProductMapper;
 import com.vvi.btb.domain.request.ProductRequest;
+import com.vvi.btb.domain.response.ProductRating;
 import com.vvi.btb.domain.response.ProductResponse;
+import com.vvi.btb.domain.response.RatingDetail;
+import com.vvi.btb.domain.response.RatingResponse;
 import com.vvi.btb.exception.domain.CategoryException;
 import com.vvi.btb.exception.domain.ProductException;
 import com.vvi.btb.dao.CategoryDao;
@@ -17,6 +20,8 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
 import static com.vvi.btb.constant.ProductImplConstant.ON;
 
 @Service
@@ -62,7 +67,7 @@ public class ProductServiceImpl implements ProductService {
             productRepository.deleteById(id);
         }
         catch (Exception ex){
-            throw new ProductException(ex.getMessage(), ProductImplConstant.PRODUCT_DELETED_SUCCESSFULLY);
+            throw new ProductException(ex.getMessage(), ProductImplConstant.PRODUCT_DELETE_ERROR_MESSAGE);
         }
         return true;
     }
@@ -99,6 +104,19 @@ public class ProductServiceImpl implements ProductService {
             log.info(ProductImplConstant.PRODUCT_NOT_FOUND);
         }
         return null;
+    }
+
+    @Override
+    public ProductRating getProductRatings(ProductResponse productResponse) {
+       String productName = productResponse.productName();
+       long totalReviews = productResponse.ratingResponse().size();
+       List<RatingDetail> ratingDetails = productResponse.ratingResponse()
+                .stream().collect(Collectors.groupingBy(RatingResponse::starRating, Collectors.counting()))
+                .entrySet()
+                .stream()
+                .map(product -> new RatingDetail(product.getKey(), product.getValue()))
+                .toList();
+       return new ProductRating(productName,totalReviews,ratingDetails);
     }
 
     private ProductResponse getProductResponse(Product product) {

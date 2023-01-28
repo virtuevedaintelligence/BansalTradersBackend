@@ -1,5 +1,8 @@
 package com.vvi.btb.service.impl;
 
+import com.vvi.btb.constant.CommonImplConstant;
+import com.vvi.btb.constant.ProductImplConstant;
+import com.vvi.btb.constant.ReviewImplConstant;
 import com.vvi.btb.domain.entity.Review;
 import com.vvi.btb.domain.entity.User;
 import com.vvi.btb.domain.mapper.RatingMapper;
@@ -7,8 +10,9 @@ import com.vvi.btb.domain.request.RatingRequest;
 import com.vvi.btb.domain.response.ProductResponse;
 import com.vvi.btb.domain.response.RatingResponse;
 import com.vvi.btb.domain.response.UserResponse;
-import com.vvi.btb.dao.RatingRepo;
+import com.vvi.btb.exception.domain.RatingException;
 import com.vvi.btb.repository.ProductRepository;
+import com.vvi.btb.repository.RatingRepository;
 import com.vvi.btb.repository.UserRepository;
 import com.vvi.btb.service.RatingService;
 import org.springframework.stereotype.Service;
@@ -18,17 +22,30 @@ import java.util.Optional;
 @Service
 public record RatingServiceImpl(ProductRepository productRepository,
                                 UserRepository userRepository,
-                                RatingRepo ratingRepo,
+                                RatingRepository ratingRepository,
                                 RatingMapper ratingMapper) implements RatingService {
 
     @Override
-    public RatingResponse postRating(RatingRequest ratingRequest, ProductResponse product, UserResponse user) {
-        Review review = ratingRepo.save(buildReview(ratingRequest));
+    public RatingResponse postRating(RatingRequest ratingRequest,
+                                     ProductResponse product, UserResponse user) throws RatingException {
+        Review reviewCreate = new Review();
+        Review review = ratingRepository.save(buildReview(reviewCreate,ratingRequest));
         return ratingMapper.apply(review);
     }
 
-    private Review buildReview(RatingRequest ratingRequest) {
-        Review review = new Review();
+    @Override
+    public RatingResponse updateRating(Long ratingId, RatingRequest ratingRequest,
+                                       ProductResponse product, UserResponse user)
+            throws RatingException {
+        Review review = ratingRepository.findReviewById(ratingId);
+        if(review == null){
+            throw new RatingException(ReviewImplConstant.REVIEW_NOT_FOUND, CommonImplConstant.PLEASE_CONTACT_ADMIN);
+        }
+        Review reviewUpdated = ratingRepository.save(buildReview(review,ratingRequest));
+        return ratingMapper.apply(reviewUpdated);
+    }
+
+    private Review buildReview(Review review, RatingRequest ratingRequest) {
         review.setReviewBy(ratingRequest.getReviewBy());
         review.setReviewDate(new Date());
         review.setReviewDescription(ratingRequest.getReviewDescription());
@@ -46,12 +63,7 @@ public record RatingServiceImpl(ProductRepository productRepository,
     }
 
     @Override
-    public boolean deleteRating(Long id) {
-        return productRepository.deleteById(id);
-    }
-
-    @Override
-    public RatingResponse updateRating(RatingRequest ratingRequest, ProductResponse product, UserResponse user) {
-        return null;
+    public boolean deleteRating(Long id) throws RatingException {
+        return ratingRepository.deleteById(id);
     }
 }

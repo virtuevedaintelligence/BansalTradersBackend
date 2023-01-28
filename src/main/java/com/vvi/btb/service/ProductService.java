@@ -1,8 +1,7 @@
 package com.vvi.btb.service;
 
-import com.vvi.btb.domain.entity.Product;
-import com.vvi.btb.domain.request.CategoryRequest;
 import com.vvi.btb.domain.request.ProductRequest;
+import com.vvi.btb.domain.response.ProductRating;
 import com.vvi.btb.domain.response.ProductResponse;
 import com.vvi.btb.exception.domain.CategoryException;
 import com.vvi.btb.exception.domain.ProductException;
@@ -17,4 +16,6 @@ public interface ProductService {
     List<ProductResponse> getAllProducts();
     ProductResponse getProductByName(String productName) throws ProductException;
     ProductResponse getProductDetail(Long id);
+
+    ProductRating getProductRatings(ProductResponse productResponse);
 }

@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class Response {
-
     public ResponseEntity<HttpResponse> response(HttpStatus httpStatus, String message, Object response) {
         return new ResponseEntity<>(new HttpResponse(httpStatus.value(), httpStatus, httpStatus.getReasonPhrase().toUpperCase(),
                 message, response), httpStatus);
