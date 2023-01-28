@@ -5,7 +5,7 @@ import com.vvi.btb.domain.entity.Category;
 import com.vvi.btb.domain.request.CategoryRequest;
 import com.vvi.btb.domain.response.CategoryResponse;
 import com.vvi.btb.exception.domain.CategoryException;
-import com.vvi.btb.repo.CategoryDao;
+import com.vvi.btb.dao.CategoryDao;
 import com.vvi.btb.service.CategoryService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

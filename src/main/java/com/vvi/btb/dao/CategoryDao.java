@@ -1,4 +1,4 @@
-package com.vvi.btb.repo;
+package com.vvi.btb.dao;
 
 import com.vvi.btb.domain.entity.Category;
 import org.springframework.data.jpa.repository.JpaRepository;

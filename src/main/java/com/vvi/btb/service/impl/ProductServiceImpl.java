@@ -8,8 +8,9 @@ import com.vvi.btb.domain.request.ProductRequest;
 import com.vvi.btb.domain.response.ProductResponse;
 import com.vvi.btb.exception.domain.CategoryException;
 import com.vvi.btb.exception.domain.ProductException;
-import com.vvi.btb.repo.CategoryDao;
-import com.vvi.btb.repo.ProductDao;
+import com.vvi.btb.dao.CategoryDao;
+import com.vvi.btb.dao.ProductDao;
+import com.vvi.btb.repository.ProductRepository;
 import com.vvi.btb.service.ProductService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -18,22 +19,23 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static com.vvi.btb.constant.ProductImplConstant.ON;
+
 @Service
 @Slf4j
 public class ProductServiceImpl implements ProductService {
 
-    private final ProductDao productDao;
+    private final ProductRepository productRepository;
     private final CategoryDao categoryDao;
-
-    public ProductServiceImpl(ProductDao productDao, CategoryDao categoryDao) {
-        this.productDao = productDao;
+    public ProductServiceImpl(ProductRepository productRepository, CategoryDao categoryDao) {
+        this.productRepository = productRepository;
         this.categoryDao = categoryDao;
     }
 
     @Override
     public ProductResponse saveProduct(ProductRequest productRequest) throws ProductException, CategoryException {
         Product productToSave = buildProduct(productRequest);
-        Product savedProduct = productDao.save(productToSave);
+        Product savedProduct = productRepository.save(productToSave);
         ProductResponse productResponse = getProductResponse(savedProduct);
         return productResponse;
     }
@@ -41,10 +43,10 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductResponse updateProduct(Long id, ProductRequest productRequest) throws ProductException, CategoryException {
         try{
-        Optional<Product> product = productDao.findById(id);
+        Optional<Product> product = productRepository.findById(id);
         if(product.isPresent()){
             Product prod = product.get();
-           return getProductResponse(productDao.save(extractedProduct(productRequest, prod)));
+           return getProductResponse(productRepository.save(extractedProduct(productRequest, prod)));
         }
         }catch (Exception ex){
             throw new ProductException(ex.getMessage(),ProductImplConstant.PRODUCT_UPDATE_ERROR_MESSAGE);
@@ -55,7 +57,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public boolean deleteProduct(Long id) throws ProductException {
         try{
-            productDao.deleteById(id);
+            productRepository.deleteById(id);
         }
         catch (Exception ex){
             throw new ProductException(ex.getMessage(), ProductImplConstant.PRODUCT_DELETED_SUCCESSFULLY);
@@ -66,17 +68,16 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<ProductResponse> getAllProducts() {
         List<ProductResponse> productResponses = new ArrayList<>();
-        productDao.findAll().stream()
+        productRepository.findAll().stream()
                 .forEach(product -> {
                     productResponses.add(getProductResponse(product));
                 });
         return productResponses;
     }
 
-
     @Override
     public ProductResponse getProductByName(String productName) throws ProductException {
-        Optional<Product> product = productDao.findByProductName(productName);
+        Optional<Product> product = productRepository.findByProductName(productName);
         ProductResponse productResponse = null;
         if(product.isPresent()){
             productResponse.setProductId(product.get().getId());
@@ -98,7 +99,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductResponse getProductDetail(Long id) {
-        Optional<Product> productDetail = productDao.findById(id);
+        Optional<Product> productDetail = productRepository.findById(id);
         if(productDetail.isPresent()){
           return getProductResponse(productDetail.get());
         }else{
@@ -118,6 +119,7 @@ public class ProductServiceImpl implements ProductService {
         productResponse.setProductPrice(savedProduct.getProductPrice());
         productResponse.setFeatured(savedProduct.isFeatured());
         productResponse.setActive(savedProduct.isActive());
+        productResponse.setAvgStarRating(savedProduct.getAverageRating());
         productResponse.setCategoryName(savedProduct.getCategory().getCategoryName());
         return productResponse;
     }
@@ -144,12 +146,12 @@ public class ProductServiceImpl implements ProductService {
     }
 
     private void setFeaturedAndActive(ProductRequest productRequest, Product prod) {
-        if(productRequest.getIsactive().equals("on")){
+        if(productRequest.getIsactive().equals(ON)){
             prod.setActive(true);
         }else{
             prod.setActive(false);
         }
-        if(productRequest.getFeatured().equals("on")){
+        if(productRequest.getFeatured().equals(ON)){
             prod.setFeatured(true);
         }else{
             prod.setFeatured(false);

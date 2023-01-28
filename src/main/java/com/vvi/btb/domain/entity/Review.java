@@ -19,9 +19,10 @@ public class Review {
     private int starRating;
     private String reviewDescription;
     private Date reviewDate;
+    private String location;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable=false)
+    @JoinColumn(name = "user_id")
     private User user;
 
     @ManyToOne

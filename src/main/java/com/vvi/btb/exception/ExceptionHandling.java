@@ -3,6 +3,7 @@ package com.vvi.btb.exception;
 import com.vvi.btb.domain.HttpResponse;
 import com.vvi.btb.exception.domain.CategoryException;
 import com.vvi.btb.exception.domain.ProductException;
+import com.vvi.btb.exception.domain.UserException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.web.servlet.error.ErrorController;
@@ -25,19 +26,13 @@ public class ExceptionHandling implements ErrorController {
     public ResponseEntity<HttpResponse> productGenericException(ProductException exception) {
         return createHttpResponse(HttpStatus.EXPECTATION_FAILED, exception.getMessage(), exception.getExplain());
     }
+    @ExceptionHandler(UserException.class)
+    public ResponseEntity<HttpResponse> userGenericException(UserException exception) {
+        return createHttpResponse(HttpStatus.EXPECTATION_FAILED, exception.getMessage(), exception.getExplain());
+    }
     private ResponseEntity<HttpResponse> createHttpResponse(HttpStatus httpStatus, String message, String explain) {
         return new ResponseEntity<>(new HttpResponse(httpStatus.value(), httpStatus,
-                httpStatus.getReasonPhrase().toUpperCase() + " " + explain, message), httpStatus);
+                httpStatus.getReasonPhrase().toUpperCase() + " " + explain, message,null), httpStatus);
     }
-
-//    @ExceptionHandler(Exception.class)
-//    public ResponseEntity<HttpResponse> internalServerErrorException(Exception exception) {
-//        LOGGER.error(exception.getMessage());
-//        return createHttpResponse(INTERNAL_SERVER_ERROR, INTERNAL_SERVER_ERROR_MSG);
-//    }
-
-    private ResponseEntity<HttpResponse> createHttpResponse(HttpStatus httpStatus, String message) {
-        return new ResponseEntity<>(new HttpResponse(httpStatus.value(), httpStatus,
-                httpStatus.getReasonPhrase().toUpperCase(), message), httpStatus);
-    }
+    
 }

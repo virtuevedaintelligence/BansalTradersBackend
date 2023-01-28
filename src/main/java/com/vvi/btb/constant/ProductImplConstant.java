@@ -11,4 +11,8 @@ public class ProductImplConstant {
     public static final String PRODUCT_DELETE_ERROR_MESSAGE =" Exception while Deleting Product";
     public static final String PRODUCT_NOT_FOUND = "Product not Found";
 
+    public static final String PRODUCT_FETCHED_SUCESSFULLY = "Product fetched Successfully";
+
+    public static final String ON = "on";
+
 }

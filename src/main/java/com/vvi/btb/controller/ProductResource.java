@@ -8,6 +8,7 @@ import com.vvi.btb.domain.response.ProductResponse;
 import com.vvi.btb.exception.domain.CategoryException;
 import com.vvi.btb.exception.domain.ProductException;
 import com.vvi.btb.service.ProductService;
+import com.vvi.btb.util.Response;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,25 +27,28 @@ import static org.springframework.http.HttpStatus.OK;
 @Slf4j
 public class ProductResource {
     private final ProductService productService;
-    public ProductResource(ProductService productService) {
+    private final Response response;
+    public ProductResource(ProductService productService, Response response) {
         this.productService = productService;
+        this.response = response;
     }
 
     @PostMapping("/createProduct")
-    public ResponseEntity<ProductResponse> createProduct(@RequestBody ProductRequest productRequest)
+    public ResponseEntity<HttpResponse> createProduct(@RequestBody ProductRequest productRequest)
             throws ProductException, CategoryException {
         log.info(productRequest.toString());
         ProductResponse product = productService.getProductByName(productRequest.getProductName());
         if(product != null){
-            return new ResponseEntity<>(product, HttpStatus.CONFLICT);
+            return response.response(HttpStatus.CONFLICT, ProductImplConstant.PRODUCT_ALREADY_EXISTS, product);
         }
         ProductResponse productResponse = productService.saveProduct(productRequest);
-        return new ResponseEntity<>(productResponse, OK);
+        return response.response(OK, ProductImplConstant.PRODUCT_ADDED_SUCCESSFULLY,productResponse);
     }
 
     @PutMapping("/updateProduct/{productId}")
     public ResponseEntity<ProductResponse> updateProduct(@PathVariable("productId") Long productId,
-                                                         @RequestBody ProductRequest productRequest) throws ProductException, CategoryException {
+                                                         @RequestBody ProductRequest productRequest)
+            throws ProductException, CategoryException {
 
         ProductResponse product = productService.getProductDetail(productId);
         if (product == null) {
@@ -78,7 +82,7 @@ public class ProductResource {
     @DeleteMapping("/delete/{productId}")
     public ResponseEntity<HttpResponse> deleteProduct(@PathVariable("productId") Long productId) throws ProductException {
         productService.deleteProduct(productId);
-        return response(OK, ProductImplConstant.PRODUCT_DELETED_SUCCESSFULLY);
+        return response.response(OK, ProductImplConstant.PRODUCT_DELETED_SUCCESSFULLY,null);
     }
 
     @GetMapping("/productDetail/{productId}")
@@ -91,13 +95,8 @@ public class ProductResource {
     }
 
     @GetMapping
-    public ResponseEntity<List<ProductResponse>> getProductDetails(){
-        return new ResponseEntity<>(productService.getAllProducts(), OK);
-    }
-
-    private ResponseEntity<HttpResponse> response(HttpStatus httpStatus, String message) {
-        return new ResponseEntity<>(new HttpResponse(httpStatus.value(), httpStatus, httpStatus.getReasonPhrase().toUpperCase(),
-                message), httpStatus);
+    public ResponseEntity<HttpResponse> getProductDetails(){
+        return response.response(OK,ProductImplConstant.PRODUCT_FETCHED_SUCESSFULLY, productService.getAllProducts());
     }
 
     private ProductRequest createProductRequest(ProductResponse productResponse){
