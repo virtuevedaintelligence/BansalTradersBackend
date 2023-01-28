@@ -1,24 +1,19 @@
 package com.vvi.btb.domain.response;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import java.util.List;
 
-@Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-public class ProductResponse {
-    private long productId;
-    private String productName;
-    private String productImageUrl;
-    private String productDescription;
-    private int productPrice;
-    private int quantity; // 10 packets 20 packets
-    private int weight; // 250gm 500gm
-    private boolean isFeatured;
-    private boolean isActive;
-    private String categoryName;
-    private int avgStarRating;
+public record ProductResponse(
+     long productId,
+     String productName,
+     String productImageUrl,
+     String productDescription,
+     int productPrice,
+     int quantity, // 10 packets 20 packets
+     int weight, // 250gm 500gm
+     boolean isFeatured,
+     boolean isActive,
+     String categoryName,
+     int avgStarRating,
+     List<RatingResponse> ratingResponse
+    ){
 }

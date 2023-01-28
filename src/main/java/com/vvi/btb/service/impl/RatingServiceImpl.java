@@ -10,11 +10,8 @@ import com.vvi.btb.domain.response.UserResponse;
 import com.vvi.btb.dao.RatingRepo;
 import com.vvi.btb.repository.ProductRepository;
 import com.vvi.btb.repository.UserRepository;
-import com.vvi.btb.service.ProductService;
 import com.vvi.btb.service.RatingService;
-import com.vvi.btb.service.UserService;
 import org.springframework.stereotype.Service;
-
 import java.util.Date;
 import java.util.Optional;
 
@@ -36,6 +33,7 @@ public record RatingServiceImpl(ProductRepository productRepository,
         review.setReviewDate(new Date());
         review.setReviewDescription(ratingRequest.getReviewDescription());
         review.setStarRating(ratingRequest.getStarRating());
+        review.setLocation(ratingRequest.getLocation());
         review.setProduct(productRepository.getProductDetail(ratingRequest.getProductId()));
         Optional<User> user = Optional.empty();
         if(ratingRequest.getUserId() != null) {
@@ -49,7 +47,7 @@ public record RatingServiceImpl(ProductRepository productRepository,
 
     @Override
     public boolean deleteRating(Long id) {
-        return false;
+        return productRepository.deleteById(id);
     }
 
     @Override

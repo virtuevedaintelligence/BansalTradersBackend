@@ -4,21 +4,19 @@ import com.vvi.btb.constant.CategoryImplConstant;
 import com.vvi.btb.constant.ProductImplConstant;
 import com.vvi.btb.domain.entity.Category;
 import com.vvi.btb.domain.entity.Product;
+import com.vvi.btb.domain.mapper.ProductMapper;
 import com.vvi.btb.domain.request.ProductRequest;
 import com.vvi.btb.domain.response.ProductResponse;
 import com.vvi.btb.exception.domain.CategoryException;
 import com.vvi.btb.exception.domain.ProductException;
 import com.vvi.btb.dao.CategoryDao;
-import com.vvi.btb.dao.ProductDao;
 import com.vvi.btb.repository.ProductRepository;
 import com.vvi.btb.service.ProductService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
 import static com.vvi.btb.constant.ProductImplConstant.ON;
 
 @Service
@@ -27,9 +25,13 @@ public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
     private final CategoryDao categoryDao;
-    public ProductServiceImpl(ProductRepository productRepository, CategoryDao categoryDao) {
+    private final ProductMapper productMapper;
+    public ProductServiceImpl(ProductRepository productRepository,
+                              CategoryDao categoryDao,
+                              ProductMapper productMapper) {
         this.productRepository = productRepository;
         this.categoryDao = categoryDao;
+        this.productMapper = productMapper;
     }
 
     @Override
@@ -80,16 +82,7 @@ public class ProductServiceImpl implements ProductService {
         Optional<Product> product = productRepository.findByProductName(productName);
         ProductResponse productResponse = null;
         if(product.isPresent()){
-            productResponse.setProductId(product.get().getId());
-            productResponse.setProductName(product.get().getProductName());
-            productResponse.setProductDescription(product.get().getProductDescription());
-            productResponse.setProductPrice(product.get().getProductPrice());
-            productResponse.setWeight(product.get().getWeight());
-            productResponse.setQuantity(product.get().getQuantity());
-            productResponse.setFeatured(product.get().isFeatured());
-            productResponse.setProductImageUrl(product.get().getProductImageUrl());
-            productResponse.setCategoryName(product.get().getCategory().getCategoryName());
-            productResponse.setActive(product.get().isActive());
+            return productMapper.apply(product.get());
         }
         else {
             log.info(ProductImplConstant.PRODUCT_NOT_FOUND);
@@ -108,20 +101,8 @@ public class ProductServiceImpl implements ProductService {
         return null;
     }
 
-    private ProductResponse getProductResponse(Product savedProduct) {
-        ProductResponse productResponse = new ProductResponse();
-        productResponse.setProductId(savedProduct.getId());
-        productResponse.setProductName(savedProduct.getProductName());
-        productResponse.setProductImageUrl(savedProduct.getProductImageUrl());
-        productResponse.setProductDescription(savedProduct.getProductDescription());
-        productResponse.setWeight(savedProduct.getWeight());
-        productResponse.setQuantity(savedProduct.getQuantity());
-        productResponse.setProductPrice(savedProduct.getProductPrice());
-        productResponse.setFeatured(savedProduct.isFeatured());
-        productResponse.setActive(savedProduct.isActive());
-        productResponse.setAvgStarRating(savedProduct.getAverageRating());
-        productResponse.setCategoryName(savedProduct.getCategory().getCategoryName());
-        return productResponse;
+    private ProductResponse getProductResponse(Product product) {
+        return productMapper.apply(product);
     }
 
     private Product buildProduct(ProductRequest productRequest) throws CategoryException {

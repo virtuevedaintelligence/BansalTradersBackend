@@ -72,7 +72,8 @@ public class ProductResource {
             field.setAccessible(true);
             ReflectionUtils.setField(field,product,value);
         });
-        ProductResponse productResponse = productService.updateProduct(productId, createProductRequest(product));
+//        ProductResponse productResponse = productService.updateProduct(productId, createProductRequest(product));
+        ProductResponse productResponse= null;
         if (productResponse == null) {
             return new ResponseEntity<>(productResponse, HttpStatus.NOT_FOUND);
         }
@@ -99,6 +100,7 @@ public class ProductResource {
         return response.response(OK,ProductImplConstant.PRODUCT_FETCHED_SUCESSFULLY, productService.getAllProducts());
     }
 
+    /*
     private ProductRequest createProductRequest(ProductResponse productResponse){
         ProductRequest productRequest = new ProductRequest();
         productRequest.setProductDescription(productResponse.getProductDescription());
@@ -112,4 +114,7 @@ public class ProductResource {
         productRequest.setProductImageUrl(productResponse.getProductImageUrl());
         return productRequest;
     }
+     */
+
+
 }

@@ -13,7 +13,6 @@ import java.util.Optional;
 @Slf4j
 public record ProductRepository(ProductDao productDao){
 
-
     public Product getProductDetail(Long id) {
         Optional<Product> productDetail = productDao.findById(id);
         if(productDetail.isPresent()){
@@ -32,8 +31,9 @@ public record ProductRepository(ProductDao productDao){
         return productDao.findById(productId);
     }
 
-    public void deleteById(Long id) {
+    public boolean deleteById(Long id) {
         productDao.deleteById(id);
+        return true;
     }
 
     public List<Product> findAll() {
