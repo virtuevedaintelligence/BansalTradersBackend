@@ -41,7 +41,6 @@ public class RatingResource {
     public ResponseEntity<HttpResponse> postReview(@RequestBody RatingRequest ratingRequest) throws RatingException {
 
         ProductResponse product = productService.getProductDetail(ratingRequest.getProductId());
-
         if(product == null){
             return response.response(HttpStatus.NOT_FOUND, ProductImplConstant.PRODUCT_NOT_FOUND, product);
         }

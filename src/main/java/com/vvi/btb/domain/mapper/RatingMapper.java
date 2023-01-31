@@ -13,6 +13,7 @@ public class RatingMapper implements Function<Review, RatingResponse> {
     @Override
     public RatingResponse apply(Review review) {
         return new RatingResponse(
+                review.getId(),
                 review.getReviewBy(),
                 review.getStarRating(),
                 review.getReviewDescription(),
