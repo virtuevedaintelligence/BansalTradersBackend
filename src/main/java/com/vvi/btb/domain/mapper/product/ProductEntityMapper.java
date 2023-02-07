@@ -38,7 +38,7 @@ public record ProductEntityMapper(CategoryDao categoryDao) implements Function<P
     public Category setCategory(ProductRequest productRequest) throws CategoryException {
         Optional<Category> category = categoryDao.findByCategoryName(productRequest.getCategoryName());
         if(category.isPresent()){
-            return  category.get();
+            return category.get();
         }else{
             throw new CategoryException(CategoryImplConstant.CATEGORY_NOT_FOUND, CategoryImplConstant.PLEASE_CONTACT_ADMIN);
         }

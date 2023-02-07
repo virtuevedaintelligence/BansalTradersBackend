@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 
 import java.text.DecimalFormat;
 import java.util.List;
+import java.util.Optional;
 
 @Entity
 @Table(name = "product")
@@ -39,12 +40,17 @@ public class Product {
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL,
             fetch = FetchType.LAZY, orphanRemoval=true)
     private List<Review> reviews;
+
+    public Optional<List<Review>> getReviews() {
+        return Optional.ofNullable(reviews);
+    }
+
     @ManyToOne
     @JoinColumn(name = "category_id", nullable=false)
     private Category category;
 
     public String getAverageRating() {
-        if(!reviews.isEmpty()){
+        if(getReviews().isPresent()){
             double sum = reviews.stream().mapToDouble(Review::getStarRating).sum();
             double count = reviews.stream().mapToDouble(Review::getStarRating).count();
             double avg = sum / count;
