@@ -18,9 +18,8 @@ public class Category{
     @Column(nullable = false, updatable = false)
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Long id;
-
+    private String categoryType;
     private String categoryName;
-
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval=true)
     private List<Product> products;
 }

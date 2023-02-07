@@ -5,4 +5,5 @@ import java.io.Serializable;
 @Data
 public class CategoryRequest implements Serializable {
     private String categoryName;
+    private String categoryType;
 }

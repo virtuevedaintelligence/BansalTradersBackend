@@ -2,6 +2,7 @@ package com.vvi.btb.service.impl;
 
 import com.vvi.btb.constant.CategoryImplConstant;
 import com.vvi.btb.domain.entity.Category;
+import com.vvi.btb.domain.mapper.CategoryMapper;
 import com.vvi.btb.domain.request.CategoryRequest;
 import com.vvi.btb.domain.response.CategoryResponse;
 import com.vvi.btb.exception.domain.CategoryException;
@@ -18,11 +19,13 @@ import java.util.Optional;
 @Slf4j
 public class CategoryServiceImpl implements CategoryService {
 
-
     private CategoryDao categoryDao;
+    private CategoryMapper categoryMapper;
 
-    public CategoryServiceImpl(CategoryDao categoryDao) {
+    public CategoryServiceImpl(CategoryDao categoryDao,
+                               CategoryMapper categoryMapper) {
         this.categoryDao = categoryDao;
+        this.categoryMapper = categoryMapper;
     }
 
 
@@ -46,16 +49,16 @@ public class CategoryServiceImpl implements CategoryService {
     public CategoryResponse updateCategory(Long id, CategoryRequest categoryRequest) throws CategoryException {
         Optional<Category> category = categoryDao.findById(id);
         CategoryResponse categoryResponse = new CategoryResponse();
-        Category cat = null;
+        Category cat;
         if(category.isPresent()){
             cat = category.get();
             cat.setCategoryName(categoryRequest.getCategoryName());
+            cat.setCategoryType(categoryRequest.getCategoryType());
             try{
-                categoryDao.save(cat);
+                categoryResponse = categoryMapper.apply(categoryDao.save(cat));
             }catch (Exception ex){
                 throw new CategoryException(ex.getMessage(), CategoryImplConstant.CATEGORY_UPDATE_ERROR_MESSAGE);
             }
-            categoryResponse.setCategoryName(cat.getCategoryName());
         }
         return categoryResponse;
     }
@@ -68,14 +71,12 @@ public class CategoryServiceImpl implements CategoryService {
         catch (Exception ex){
             throw new CategoryException(ex.getMessage(), CategoryImplConstant.CATEGORY_DELETE_ERROR_MESSAGE);
         }
-
         return true;
     }
 
     @Override
     public List<CategoryResponse> getAllCategories() {
-        List<CategoryResponse> categoryResponses= new ArrayList<>();
-        return build(categoryDao.findAll(),categoryResponses);
+        return buildCategories(categoryDao.findAll());
     }
 
     @Override
@@ -83,20 +84,18 @@ public class CategoryServiceImpl implements CategoryService {
         Optional<Category> category = categoryDao.findByCategoryName(categoryName);
         CategoryResponse categoryResponse = null;
         if(category.isPresent()){
-            categoryResponse.setCategoryName(category.get().getCategoryName());
+        categoryResponse = categoryMapper.apply(category.get());
         }
         else {
-            log.info(CategoryImplConstant.CATEGORY_ALREADY_EXISTS);
+            log.info(CategoryImplConstant.CATEGORY_NOT_FOUND);
         }
         return categoryResponse;
     }
 
-    private List<CategoryResponse> build(List<Category> categories, List<CategoryResponse> categoryResponses){
+    private List<CategoryResponse> buildCategories(List<Category> categories){
+        List<CategoryResponse> categoryResponses = new ArrayList<>();
         categories.forEach(category -> {
-            CategoryResponse categoryResponse = new CategoryResponse();
-            categoryResponse.setId(category.getId());
-            categoryResponse.setCategoryName(category.getCategoryName());
-            categoryResponses.add(categoryResponse);
+            categoryResponses.add(categoryMapper.apply(category));
         });
         return categoryResponses;
     }

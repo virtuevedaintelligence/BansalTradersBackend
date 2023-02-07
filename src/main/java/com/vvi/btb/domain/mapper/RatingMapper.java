@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 import java.util.function.Function;
 
 @Component
-public class RatingMapper implements Function<Review, RatingResponse> {
+public record RatingMapper() implements Function<Review, RatingResponse> {
     @Override
     public RatingResponse apply(Review review) {
         return new RatingResponse(

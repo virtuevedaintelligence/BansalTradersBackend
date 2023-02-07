@@ -1,10 +1,9 @@
 package com.vvi.btb.service.impl;
 
-import com.vvi.btb.constant.CategoryImplConstant;
 import com.vvi.btb.constant.ProductImplConstant;
-import com.vvi.btb.domain.entity.Category;
 import com.vvi.btb.domain.entity.Product;
-import com.vvi.btb.domain.mapper.ProductMapper;
+import com.vvi.btb.domain.mapper.product.ProductEntityMapper;
+import com.vvi.btb.domain.mapper.product.ProductResponseMapper;
 import com.vvi.btb.domain.request.ProductRequest;
 import com.vvi.btb.domain.response.ProductRating;
 import com.vvi.btb.domain.response.ProductResponse;
@@ -15,6 +14,7 @@ import com.vvi.btb.exception.domain.ProductException;
 import com.vvi.btb.dao.CategoryDao;
 import com.vvi.btb.repository.ProductRepository;
 import com.vvi.btb.service.ProductService;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
@@ -22,29 +22,24 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static com.vvi.btb.constant.ProductImplConstant.ON;
-
 @Service
 @Slf4j
 public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
-    private final CategoryDao categoryDao;
-    private final ProductMapper productMapper;
+    private final ProductResponseMapper productResponseMapper;
+    private final ProductEntityMapper productEntityMapper;
     public ProductServiceImpl(ProductRepository productRepository,
-                              CategoryDao categoryDao,
-                              ProductMapper productMapper) {
+                              ProductResponseMapper productResponseMapper,
+                              ProductEntityMapper productEntityMapper) {
         this.productRepository = productRepository;
-        this.categoryDao = categoryDao;
-        this.productMapper = productMapper;
+        this.productResponseMapper = productResponseMapper;
+        this.productEntityMapper = productEntityMapper;
     }
 
     @Override
     public ProductResponse saveProduct(ProductRequest productRequest) throws ProductException, CategoryException {
-        Product productToSave = buildProduct(productRequest);
-        Product savedProduct = productRepository.save(productToSave);
-        ProductResponse productResponse = getProductResponse(savedProduct);
-        return productResponse;
+        return getProductResponse(productRepository.save(productEntityMapper.apply(productRequest)));
     }
 
     @Override
@@ -52,7 +47,7 @@ public class ProductServiceImpl implements ProductService {
         try{
         Optional<Product> product = productRepository.findById(id);
         if(product.isPresent()){
-            Product prod = product.get();
+           Product prod = product.get();
            return getProductResponse(productRepository.save(extractedProduct(productRequest, prod)));
         }
         }catch (Exception ex){
@@ -75,10 +70,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<ProductResponse> getAllProducts() {
         List<ProductResponse> productResponses = new ArrayList<>();
-        productRepository.findAll().stream()
-                .forEach(product -> {
-                    productResponses.add(getProductResponse(product));
-                });
+        productRepository.findAll().forEach(product -> productResponses.add(getProductResponse(product)));
         return productResponses;
     }
 
@@ -87,7 +79,7 @@ public class ProductServiceImpl implements ProductService {
         Optional<Product> product = productRepository.findByProductName(productName);
         ProductResponse productResponse = null;
         if(product.isPresent()){
-            return productMapper.apply(product.get());
+            return productResponseMapper.apply(product.get());
         }
         else {
             log.info(ProductImplConstant.PRODUCT_NOT_FOUND);
@@ -120,40 +112,21 @@ public class ProductServiceImpl implements ProductService {
     }
 
     private ProductResponse getProductResponse(Product product) {
-        return productMapper.apply(product);
+        return productResponseMapper.apply(product);
     }
 
-    private Product buildProduct(ProductRequest productRequest) throws CategoryException {
-        Product product = new Product();
-        return extractedProduct(productRequest,product);
-    }
-    private Product extractedProduct(ProductRequest productRequest, Product prod) throws CategoryException {
+
+    @SneakyThrows
+    private Product extractedProduct(ProductRequest productRequest, Product prod) {
         prod.setProductName(productRequest.getProductName());
-        prod.setProductPrice(productRequest.getProductPrice());
+        prod.setProductDescription(productRequest.getProductDescription());
         prod.setProductImageUrl(productRequest.getProductImageUrl());
         prod.setWeight(productRequest.getWeight());
-        prod.setProductDescription(productRequest.getProductDescription());
-        prod.setQuantity(productRequest.getQuantity());
-        setFeaturedAndActive(productRequest, prod);
-        Optional<Category> category = categoryDao.findByCategoryName(productRequest.getCategoryName());
-        if(category.isPresent()){
-            prod.setCategory(category.get());
-        }else{
-            throw new CategoryException(CategoryImplConstant.CATEGORY_NOT_FOUND, CategoryImplConstant.PLEASE_CONTACT_ADMIN);
-        }
+        prod.setProductPrice(productRequest.getProductPrice());
+        prod.setActive(productEntityMapper.setActive(productRequest));
+        prod.setFeatured(productEntityMapper.setFeatured(productRequest));
+        prod.setCategory(productEntityMapper.setCategory(productRequest));
+        prod.setCategoryName(productRequest.getCategoryName());
         return prod;
-    }
-
-    private void setFeaturedAndActive(ProductRequest productRequest, Product prod) {
-        if(productRequest.getIsactive().equals(ON)){
-            prod.setActive(true);
-        }else{
-            prod.setActive(false);
-        }
-        if(productRequest.getFeatured().equals(ON)){
-            prod.setFeatured(true);
-        }else{
-            prod.setFeatured(false);
-        }
     }
 }
