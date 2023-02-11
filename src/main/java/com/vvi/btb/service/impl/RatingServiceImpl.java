@@ -1,7 +1,6 @@
 package com.vvi.btb.service.impl;
 
 import com.vvi.btb.constant.CommonImplConstant;
-import com.vvi.btb.constant.ProductImplConstant;
 import com.vvi.btb.constant.ReviewImplConstant;
 import com.vvi.btb.domain.entity.Review;
 import com.vvi.btb.domain.entity.User;
@@ -14,7 +13,7 @@ import com.vvi.btb.exception.domain.RatingException;
 import com.vvi.btb.repository.ProductRepository;
 import com.vvi.btb.repository.RatingRepository;
 import com.vvi.btb.repository.UserRepository;
-import com.vvi.btb.service.RatingService;
+import com.vvi.btb.service.abs.RatingService;
 import org.springframework.stereotype.Service;
 import java.util.Date;
 import java.util.Optional;
@@ -27,15 +26,14 @@ public record RatingServiceImpl(ProductRepository productRepository,
 
     @Override
     public RatingResponse postRating(RatingRequest ratingRequest,
-                                     ProductResponse product, UserResponse user) throws RatingException {
+                                     Optional<ProductResponse> product, UserResponse user) throws RatingException {
         Review reviewCreate = new Review();
         Review review = ratingRepository.save(buildReview(reviewCreate,ratingRequest));
         return ratingMapper.apply(review);
     }
 
     @Override
-    public RatingResponse updateRating(Long ratingId, RatingRequest ratingRequest,
-                                       ProductResponse product, UserResponse user)
+    public RatingResponse updateRating(Long ratingId, RatingRequest ratingRequest, UserResponse user)
             throws RatingException {
         Review review = ratingRepository.findReviewById(ratingId);
         if(review == null){

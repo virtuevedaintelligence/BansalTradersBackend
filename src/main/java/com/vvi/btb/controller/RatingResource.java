@@ -8,14 +8,18 @@ import com.vvi.btb.domain.response.ProductResponse;
 import com.vvi.btb.domain.response.RatingResponse;
 import com.vvi.btb.domain.response.UserResponse;
 import com.vvi.btb.exception.domain.RatingException;
-import com.vvi.btb.service.ProductService;
-import com.vvi.btb.service.RatingService;
-import com.vvi.btb.service.UserService;
+import com.vvi.btb.exception.domain.UserException;
+import com.vvi.btb.service.abs.ProductService;
+import com.vvi.btb.service.abs.RatingService;
+import com.vvi.btb.service.abs.UserService;
 import com.vvi.btb.util.Response;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
+
 import static org.springframework.http.HttpStatus.OK;
 
 @RestController
@@ -23,14 +27,15 @@ import static org.springframework.http.HttpStatus.OK;
 @RequestMapping("/v1/ratings/")
 @Slf4j
 public class RatingResource {
+    private final ProductService productService;
+    private final UserService userService;
+    private final Response response;
+    private final RatingService ratingService;
 
-    private ProductService productService;
-    private UserService userService;
-    private Response response;
-    private RatingService ratingService;
-
-    public RatingResource(ProductService productService, UserService userService,
-                          Response response, RatingService ratingService) {
+    public RatingResource(ProductService productService,
+                          UserService userService,
+                          Response response,
+                          RatingService ratingService) {
         this.productService = productService;
         this.userService = userService;
         this.response = response;
@@ -38,10 +43,10 @@ public class RatingResource {
     }
 
     @PostMapping("/postReview")
-    public ResponseEntity<HttpResponse> postReview(@RequestBody RatingRequest ratingRequest) throws RatingException {
+    public ResponseEntity<HttpResponse> postReview(@RequestBody RatingRequest ratingRequest) throws RatingException, UserException {
 
-        ProductResponse product = productService.getProductDetail(ratingRequest.getProductId());
-        if(product == null){
+        Optional<ProductResponse> product = productService.getProductDetail(ratingRequest.getProductId());
+        if(!product.isPresent()){
             return response.response(HttpStatus.NOT_FOUND, ProductImplConstant.PRODUCT_NOT_FOUND, product);
         }
         UserResponse user = null;
@@ -61,11 +66,11 @@ public class RatingResource {
     }
     @PutMapping("/updateReview/{reviewId}")
     public ResponseEntity<HttpResponse> updateReview(@PathVariable("reviewId") Long reviewId,
-                                                     @RequestBody RatingRequest ratingRequest) throws RatingException {
+                                                     @RequestBody RatingRequest ratingRequest) throws RatingException, UserException {
 
-        ProductResponse product = productService.getProductDetail(ratingRequest.getProductId());
+        Optional<ProductResponse> product = productService.getProductDetail(ratingRequest.getProductId());
 
-        if(product == null){
+        if(!product.isPresent()){
             return response.response(HttpStatus.NOT_FOUND, ProductImplConstant.PRODUCT_NOT_FOUND, product);
         }
         UserResponse user = null;
@@ -73,7 +78,7 @@ public class RatingResource {
             user  = userService.findUserById(ratingRequest.getUserId());
         }
 
-        RatingResponse ratingResponse = ratingService.updateRating(reviewId, ratingRequest, product, user);
+        RatingResponse ratingResponse = ratingService.updateRating(reviewId, ratingRequest, user);
         return response.response(OK, ReviewImplConstant.REVIEW_ADDED_SUCCESSFULLY, ratingResponse);
     }
 }

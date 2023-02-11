@@ -7,7 +7,7 @@ import com.vvi.btb.domain.request.CategoryRequest;
 import com.vvi.btb.domain.response.CategoryResponse;
 import com.vvi.btb.exception.domain.CategoryException;
 import com.vvi.btb.dao.CategoryDao;
-import com.vvi.btb.service.CategoryService;
+import com.vvi.btb.service.abs.CategoryService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -17,16 +17,9 @@ import java.util.Optional;
 
 @Service
 @Slf4j
-public class CategoryServiceImpl implements CategoryService {
+public record CategoryServiceImpl(CategoryDao categoryDao,
+                                  CategoryMapper categoryMapper) implements CategoryService {
 
-    private CategoryDao categoryDao;
-    private CategoryMapper categoryMapper;
-
-    public CategoryServiceImpl(CategoryDao categoryDao,
-                               CategoryMapper categoryMapper) {
-        this.categoryDao = categoryDao;
-        this.categoryMapper = categoryMapper;
-    }
 
 
     @Override

@@ -18,11 +18,8 @@ public class Order {
     @Column(nullable = false, updatable = false)
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Long id;
-
     private String orderPlacedDate;
-
     private int totalOrderPrice;
-
     @OneToOne
     @JoinColumn(name = "shipping_id")
     private ShippingAddress shippingAddress;

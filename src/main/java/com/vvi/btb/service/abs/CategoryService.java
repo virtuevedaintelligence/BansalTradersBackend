@@ -1,4 +1,4 @@
-package com.vvi.btb.service;
+package com.vvi.btb.service.abs;
 
 import com.vvi.btb.domain.request.CategoryRequest;
 import com.vvi.btb.domain.response.CategoryResponse;
