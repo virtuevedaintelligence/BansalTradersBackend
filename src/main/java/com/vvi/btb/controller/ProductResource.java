@@ -51,7 +51,6 @@ public class ProductResource {
     public ResponseEntity<HttpResponse> updateProduct(@PathVariable("productId") Long productId,
                                                          @RequestBody ProductRequest productRequest)
             throws ProductException, CategoryException {
-
         Optional<ProductResponse> productDetail = productService.getProductDetail(productId);
         if (productDetail.isPresent()) {
             return response.response(OK, ProductImplConstant.PRODUCT_ALREADY_EXISTS, productDetail.get());
@@ -76,7 +75,7 @@ public class ProductResource {
         if(productDetail.isPresent()){
            return response.response(OK, ProductImplConstant.PRODUCT_FETCHED_SUCESSFULLY, productDetail);
         }
-        return  response.response(NOT_FOUND, ProductImplConstant.PRODUCT_NOT_FOUND,productDetail.get());
+        return response.response(NOT_FOUND, ProductImplConstant.PRODUCT_NOT_FOUND,productDetail.get());
     }
 
     @GetMapping("/getAllProducts")
@@ -85,6 +84,7 @@ public class ProductResource {
     }
 
     @GetMapping("/productRating/{productId}")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
     public ResponseEntity<HttpResponse> getProductRatings(@PathVariable ("productId") Long productId) throws ProductException {
         Optional<ProductResponse> productDetail = productService.getProductDetail(productId);
         if(productDetail.isPresent()){

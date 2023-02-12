@@ -39,7 +39,7 @@ public record UserRepository (UserDao userDao) {
         }else{
             log.info(String.valueOf(UserImplConstant.USER_NOT_FOUND));
         }
-        return null;
+        return Optional.empty();
     }
 
     public User save(User user) throws UserException {

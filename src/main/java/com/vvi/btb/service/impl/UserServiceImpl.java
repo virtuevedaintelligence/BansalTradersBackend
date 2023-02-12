@@ -50,6 +50,6 @@ public record UserServiceImpl(UserRepository userRepository,
     public Optional<UserResponse> findUserByName(String userName) throws UserException {
         return Optional.ofNullable(userRepository
                 .findUserByUserName(userName).map(userResponseMapper)
-                .orElseThrow(() -> new UserException(USER_NOT_FOUND, " " + BY + userName)));
+                .orElse(null));
     }
 }

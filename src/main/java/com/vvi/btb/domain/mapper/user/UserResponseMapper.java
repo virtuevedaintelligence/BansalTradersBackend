@@ -16,6 +16,7 @@ public record UserResponseMapper() implements Function<User, UserResponse> {
                 user.getUserName(),
                 user.getEmail(),
                 user.getContactNumber(),
-                user.getEmail());
+                user.getEmail(),
+                user.getPassword());
     }
 }

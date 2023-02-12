@@ -68,7 +68,12 @@ public class UserResource {
     public ResponseEntity<HttpResponse> verifyOTP(@RequestBody UserOTPRequest userOTPRequest)
     {
         if(otpService.verifyOTP(userOTPRequest)){
-            return response.response(OK, USER_OTP_VERIFIED,null);
+            Optional<UserResponse> user = userService.findUserByContactNumber(userOTPRequest.getNumber());
+            if(!user.isPresent()){
+                return response.response(BAD_GATEWAY, UserImplConstant.USER_OTP_NOT_VERIFIED,null);
+            }
+            String token = jwtService.generateToken(user.get().username());
+            return response.response(OK, UserImplConstant.USER_LOGGED_SUCCESS, token);
         }
         return response.response(BAD_GATEWAY, UserImplConstant.USER_OTP_NOT_VERIFIED,null);
     }
@@ -92,8 +97,8 @@ public class UserResource {
                         userLoginRequest.getPassword()));
         if(authenticate.isAuthenticated()){
             String token = jwtService.generateToken(userLoginRequest.getUserName());
-            return response.response(OK, String.valueOf(UserImplConstant.USER_LOGGED_SUCCESS), token);
+            return response.response(OK, UserImplConstant.USER_LOGGED_SUCCESS, token);
         }
-        return response.response(BAD_GATEWAY, String.valueOf(UserImplConstant.USER_NOT_OTP_GENERATED),null);
+        return response.response(BAD_GATEWAY, UserImplConstant.USER_NOT_OTP_GENERATED,null);
     }
 }

@@ -16,6 +16,7 @@ import com.vvi.btb.util.Response;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -43,6 +44,7 @@ public class RatingResource {
     }
 
     @PostMapping("/postReview")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
     public ResponseEntity<HttpResponse> postReview(@RequestBody RatingRequest ratingRequest) throws RatingException, UserException {
 
         Optional<ProductResponse> product = productService.getProductDetail(ratingRequest.getProductId());
@@ -59,12 +61,14 @@ public class RatingResource {
     }
 
     @DeleteMapping("/deleteReview/{reviewId}")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
     public ResponseEntity<HttpResponse> deleteReview(@PathVariable("reviewId") Long reviewId)
             throws RatingException {
         ratingService.deleteRating(reviewId);
         return response.response(OK, ReviewImplConstant.REVIEW_DELETED_SUCCESSFULLY,null);
     }
     @PutMapping("/updateReview/{reviewId}")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
     public ResponseEntity<HttpResponse> updateReview(@PathVariable("reviewId") Long reviewId,
                                                      @RequestBody RatingRequest ratingRequest) throws RatingException, UserException {
 

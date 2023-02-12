@@ -59,7 +59,7 @@ public class OTPServiceImpl implements OTPService {
     }
 
     private String generateOTP(){
-        return new DecimalFormat("000000")
+        return new DecimalFormat("100000")
                 .format(new Random().nextInt(999999));
     }
 }
