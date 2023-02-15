@@ -17,7 +17,7 @@ public record UserOTPEntityMapper(PasswordEncoder passwordEncoder) implements Fu
                 .lastName(String.valueOf(userOTPRequest.getNumber()))
                 .userName(String.valueOf(userOTPRequest.getNumber()))
                 .password(passwordEncoder.encode(String.valueOf(userOTPRequest.getNumber())))
-                .contactNumber(userOTPRequest.getNumber())
+                .contactNumber(Long.parseLong(userOTPRequest.getNumber()))
                 .roles(UserImplConstant.USER)
                 .build();
     }

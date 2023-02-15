@@ -15,5 +15,9 @@ public class UserImplConstant {
     public static String USER_LOGGED_SUCCESS =  "User logged in successfully";
     public static String USER ="ROLE_USER";
     public static String ADMIN ="ROLE_ADMIN";
-
+    public static String FAILED = "Failed";
+    public static String SUCCESS = "Success";
+    public static String FROM = "This OTP is from Bansal Traders";
+    public static String MESSAGE_BODY = "OTP expires in 5 minutes";
+    public static String COUNTRY_CODE="91";
 }

@@ -1,5 +1,6 @@
 package com.vvi.btb.exception;
 
+import com.fasterxml.jackson.databind.exc.InvalidDefinitionException;
 import com.vvi.btb.domain.HttpResponse;
 import com.vvi.btb.exception.domain.CategoryException;
 import com.vvi.btb.exception.domain.ProductException;
@@ -29,6 +30,11 @@ public class ExceptionHandling implements ErrorController {
     @ExceptionHandler(UserException.class)
     public ResponseEntity<HttpResponse> userGenericException(UserException exception) {
         return createHttpResponse(HttpStatus.EXPECTATION_FAILED, exception.getMessage(), exception.getExplain());
+    }
+    @ExceptionHandler(InvalidDefinitionException.class)
+    public ResponseEntity<HttpResponse> validationException(InvalidDefinitionException exception) {
+        return createHttpResponse(HttpStatus.EXPECTATION_FAILED, exception.getMessage(),
+                exception.getProperty().findReferenceName());
     }
     private ResponseEntity<HttpResponse> createHttpResponse(HttpStatus httpStatus, String message, String explain) {
         return new ResponseEntity<>(new HttpResponse(httpStatus.value(), httpStatus,
