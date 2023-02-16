@@ -12,7 +12,11 @@ public class UserImplConstant {
     public static String USER_REGISTERED_SUCCESSFULLY =  "User Registration success";
     public static String USER_OTP_VERIFIED =   "User OTP Verified";
     public static String USER_OTP_NOT_VERIFIED =  "User OTP Not Verified";
+    public static String USER_GENERATE_OTP =  "Please Generate OTP";
     public static String USER_LOGGED_SUCCESS =  "User logged in successfully";
+    public static String ADMIN_LOGGED_SUCCESS =  "Admin logged in successfully";
+    public static String ADMIN_REGISTERED_SUCCESS =  "Admin Registered in successfully";
+    public static String ADMIN_NOT_LOGGED_SUCCESS ="Admin not logged in successfully";
     public static String USER ="ROLE_USER";
     public static String ADMIN ="ROLE_ADMIN";
     public static String FAILED = "Failed";

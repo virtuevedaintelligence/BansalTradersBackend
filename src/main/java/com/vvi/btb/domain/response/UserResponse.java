@@ -6,7 +6,6 @@ public record UserResponse(
          String username,
          String email,
          long contactNumber,
-         String profileImageUrl,
-         String password
+         String profileImageUrl
 ) {
 }

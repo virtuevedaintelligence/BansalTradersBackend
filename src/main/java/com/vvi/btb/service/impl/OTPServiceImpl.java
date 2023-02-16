@@ -67,9 +67,9 @@ public class OTPServiceImpl implements OTPService {
     @Override
     public boolean verifyOTP(UserOTPRequest userOTPRequest) {
         boolean validated = false;
-        if(cache.containsKey(userOTPRequest.getNumber())){
-             validated = Long.parseLong(userOTPRequest.getOtp()) == Long.parseLong(cache.get(userOTPRequest.getNumber()).getOtp());
-             cache.remove(userOTPRequest.getNumber());
+        if(cache.containsKey(Long.parseLong(userOTPRequest.getNumber()))){
+             validated = Long.parseLong(userOTPRequest.getOtp()) == Long.parseLong(cache.get(Long.parseLong(userOTPRequest.getNumber())).getOtp());
+             cache.remove(Long.parseLong(userOTPRequest.getNumber()));
         }
         return validated;
     }

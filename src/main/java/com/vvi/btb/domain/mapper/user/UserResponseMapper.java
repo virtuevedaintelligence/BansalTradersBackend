@@ -3,7 +3,6 @@ package com.vvi.btb.domain.mapper.user;
 import com.vvi.btb.domain.entity.User;
 import com.vvi.btb.domain.response.UserResponse;
 import org.springframework.stereotype.Component;
-
 import java.util.function.Function;
 
 @Component
@@ -16,7 +15,6 @@ public record UserResponseMapper() implements Function<User, UserResponse> {
                 user.getUserName(),
                 user.getEmail(),
                 user.getContactNumber(),
-                user.getEmail(),
-                user.getPassword());
+                user.getEmail()); // Profile Image
     }
 }
