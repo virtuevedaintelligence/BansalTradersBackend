@@ -20,6 +20,8 @@ public class Order {
     private Long id;
     private String orderPlacedDate;
     private int totalOrderPrice;
+    @Enumerated(EnumType.STRING)
+    private OrderStatus orderStatus;
     @OneToOne
     @JoinColumn(name = "shipping_id")
     private ShippingAddress shippingAddress;

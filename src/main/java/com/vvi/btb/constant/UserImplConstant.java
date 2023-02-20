@@ -24,4 +24,7 @@ public class UserImplConstant {
     public static String FROM = "This OTP is from Bansal Traders";
     public static String MESSAGE_BODY = "OTP expires in 5 minutes";
     public static String COUNTRY_CODE="91";
+    public static String ADMIN_REGISTER_EMAIL="Admin Register Successfully with Bansal Traders";
+    public static String BANSAL_TRADERS ="bansal traders";
+    public static String from = "virtuevedaintelligence@gmail.com";
 }

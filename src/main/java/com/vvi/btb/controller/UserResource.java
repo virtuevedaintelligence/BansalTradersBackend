@@ -1,9 +1,8 @@
 package com.vvi.btb.controller;
 
-import com.fasterxml.jackson.databind.exc.InvalidDefinitionException;
-import com.vvi.btb.constant.UserImplConstant;
 import com.vvi.btb.domain.HttpResponse;
 import com.vvi.btb.domain.mapper.user.UserRegisterEntityMapper;
+import com.vvi.btb.domain.mapper.user.UserResponseMapper;
 import com.vvi.btb.domain.request.user.UserLoginRequest;
 import com.vvi.btb.domain.request.user.UserOTPRequest;
 import com.vvi.btb.domain.request.user.UserRegisterRequest;
@@ -26,6 +25,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+
 import static com.vvi.btb.constant.UserImplConstant.*;
 import static org.springframework.http.HttpStatus.*;
 
@@ -41,18 +41,21 @@ public class UserResource {
     private final UserRegisterEntityMapper userRegisterEntityMapper;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
-
-    public UserResource(Response response, UserService userService,
+    private final UserResponseMapper userResponseMapper;
+    public UserResource(Response response,
+                        UserService userService,
                         OTPService otpService,
                         UserRegisterEntityMapper userRegisterEntityMapper,
                         JwtService jwtService,
-                        AuthenticationManager authenticationManager) {
+                        AuthenticationManager authenticationManager,
+                        UserResponseMapper userResponseMapper) {
         this.response = response;
         this.userService = userService;
         this.otpService = otpService;
         this.userRegisterEntityMapper = userRegisterEntityMapper;
         this.jwtService = jwtService;
         this.authenticationManager = authenticationManager;
+        this.userResponseMapper = userResponseMapper;
     }
 
     @PostMapping("/generateOTP")
@@ -87,10 +90,7 @@ public class UserResource {
             return response.response(BAD_GATEWAY, USER_OTP_NOT_VERIFIED, USER_GENERATE_OTP);
         }
         if(otpService.verifyOTP(userOTPRequest)){
-            String token = jwtService.generateToken(user.get().username());
-            Map<String, UserResponse> userResponseMap = new HashMap<>();
-            userResponseMap.put(token, user.get());
-            return response.response(OK, USER_LOGGED_SUCCESS, userResponseMap);
+            return response.response(OK, USER_LOGGED_SUCCESS, user.get());
         }
         return response.response(BAD_GATEWAY, USER_OTP_NOT_VERIFIED,null);
     }
@@ -112,10 +112,7 @@ public class UserResource {
                         userLoginRequest.getPassword()));
         if(authenticate.isAuthenticated()){
             Optional<UserResponse> user = userService.findUserByName(userLoginRequest.getUserName());
-            String token = jwtService.generateToken(userLoginRequest.getUserName());
-            Map<String, UserResponse> userResponseMap = new HashMap<>();
-            userResponseMap.put(token, user.get());
-            return response.response(OK, ADMIN_LOGGED_SUCCESS, userResponseMap);
+            return response.response(OK, ADMIN_LOGGED_SUCCESS, user.get());
         }
         return response.response(BAD_GATEWAY, ADMIN_NOT_LOGGED_SUCCESS,null);
     }

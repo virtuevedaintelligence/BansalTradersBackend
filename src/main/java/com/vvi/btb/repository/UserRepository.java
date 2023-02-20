@@ -4,6 +4,7 @@ import com.vvi.btb.constant.UserImplConstant;
 import com.vvi.btb.dao.UserDao;
 import com.vvi.btb.domain.entity.User;
 import com.vvi.btb.exception.domain.UserException;
+import com.vvi.btb.service.impl.EmailService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -11,7 +12,7 @@ import java.util.Optional;
 
 @Component
 @Slf4j
-public record UserRepository (UserDao userDao) {
+public record UserRepository (UserDao userDao, EmailService emailService) {
 
     public Optional<User> findUserById(Long id){
         Optional<User> userDetail = userDao.findById(id);
@@ -44,6 +45,7 @@ public record UserRepository (UserDao userDao) {
 
     public User save(User user) throws UserException {
         try{
+           //emailService.sendMail(user);
            return userDao.save(user);
         }
         catch (Exception ex){

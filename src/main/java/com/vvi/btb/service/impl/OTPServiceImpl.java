@@ -48,20 +48,25 @@ public class OTPServiceImpl implements OTPService {
 
     private OTPResponse getOtpResponse(OTPResponse otpResponse, int count, long number) {
         // nexon code
+        // vonageApi(otpResponse, number);
+        otpResponse.setStatus(SUCCESS);
+        otpResponse.setOtp(generateOTP());
+        otpResponse.setCount(count);
+        otpResponse.setTime(LocalDateTime.now());
+        return otpResponse;
+    }
+
+    private void vonageApi(OTPResponse otpResponse, long number) {
         VonageClient client = VonageClient.builder().apiKey("f6fd3928").apiSecret("6YHCb8wRvOj6cHcn").build();
         String NUMBER = String.valueOf(number);
         TextMessage message = new TextMessage(FROM, COUNTRY_CODE + NUMBER, MESSAGE_BODY);
         SmsSubmissionResponse response = client.getSmsClient().submitMessage(message);
 
         if (response.getMessages().get(0).getStatus() == MessageStatus.OK) {
-            otpResponse.setStatus(UserImplConstant.SUCCESS);
+            otpResponse.setStatus(SUCCESS);
         } else {
-            otpResponse.setStatus(UserImplConstant.FAILED);
+            otpResponse.setStatus(FAILED);
         }
-        otpResponse.setOtp(generateOTP());
-        otpResponse.setCount(count);
-        otpResponse.setTime(LocalDateTime.now());
-        return otpResponse;
     }
 
     @Override
