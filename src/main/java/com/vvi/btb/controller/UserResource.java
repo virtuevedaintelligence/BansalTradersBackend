@@ -21,11 +21,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
-
 import static com.vvi.btb.constant.UserImplConstant.*;
 import static org.springframework.http.HttpStatus.*;
 
@@ -33,30 +29,11 @@ import static org.springframework.http.HttpStatus.*;
 @RestController
 @RequestMapping("/v1/users")
 @Slf4j
-public class UserResource {
-
-    private final Response response;
-    private final UserService userService;
-    private final OTPService otpService;
-    private final UserRegisterEntityMapper userRegisterEntityMapper;
-    private final JwtService jwtService;
-    private final AuthenticationManager authenticationManager;
-    private final UserResponseMapper userResponseMapper;
-    public UserResource(Response response,
-                        UserService userService,
-                        OTPService otpService,
-                        UserRegisterEntityMapper userRegisterEntityMapper,
-                        JwtService jwtService,
-                        AuthenticationManager authenticationManager,
-                        UserResponseMapper userResponseMapper) {
-        this.response = response;
-        this.userService = userService;
-        this.otpService = otpService;
-        this.userRegisterEntityMapper = userRegisterEntityMapper;
-        this.jwtService = jwtService;
-        this.authenticationManager = authenticationManager;
-        this.userResponseMapper = userResponseMapper;
-    }
+public record UserResource(Response response, UserService userService,
+         OTPService otpService, UserRegisterEntityMapper userRegisterEntityMapper,
+         JwtService jwtService, AuthenticationManager authenticationManager,
+         UserResponseMapper userResponseMapper
+) {
 
     @PostMapping("/generateOTP")
     public ResponseEntity<HttpResponse> generateOTP(@RequestBody @Valid UserOTPRequest userOTPRequest,

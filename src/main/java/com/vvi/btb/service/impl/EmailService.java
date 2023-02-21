@@ -1,19 +1,13 @@
 package com.vvi.btb.service.impl;
 
 import com.vvi.btb.domain.entity.User;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
-
 import static com.vvi.btb.constant.UserImplConstant.*;
 
 @Service
-public class EmailService {
-    private final JavaMailSender javaMailSender;
-    public EmailService(JavaMailSender javaMailSender) {
-        this.javaMailSender = javaMailSender;
-    }
+public record EmailService(JavaMailSender javaMailSender) {
 
     public void sendMail(User user){
         SimpleMailMessage simpleMailMessage = new SimpleMailMessage();

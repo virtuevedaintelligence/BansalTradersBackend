@@ -1,7 +1,6 @@
 package com.vvi.btb.util;
 
 import com.vvi.btb.domain.HttpResponse;
-import com.vvi.btb.domain.response.ProductResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
