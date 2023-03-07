@@ -28,7 +28,7 @@ public record CategoryServiceImpl(CategoryDao categoryDao,
         Category category = new Category();
         CategoryResponse categoryResponse = new CategoryResponse();
         category.setCategoryName(categoryRequest.getCategoryName());
-        category.setCategoryType(categoryResponse.getCategoryType());
+        category.setCategoryType(categoryRequest.getCategoryType());
         try {
             Category savedCategory = categoryDao.save(category);
             categoryResponse.setCategoryName(savedCategory.getCategoryName());
