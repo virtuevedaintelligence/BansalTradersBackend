@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Entity
 @Table(name = "orders")
 @Data
@@ -20,6 +22,8 @@ public class Order {
     private Long id;
     private String orderPlacedDate;
     private int totalOrderPrice;
+    @Enumerated(EnumType.STRING)
+    private Payment payment;
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;
     @OneToOne
@@ -37,4 +41,7 @@ public class Order {
     @JoinColumn(name = "user_id", nullable=false)
     private User user;
 
+    @OneToMany
+    @JoinColumn()
+    private List<OrderProducts> orderProducts;
 }

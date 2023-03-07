@@ -4,13 +4,11 @@ import com.vonage.client.VonageClient;
 import com.vonage.client.sms.MessageStatus;
 import com.vonage.client.sms.SmsSubmissionResponse;
 import com.vonage.client.sms.messages.TextMessage;
-import com.vvi.btb.constant.UserImplConstant;
 import com.vvi.btb.domain.request.user.UserOTPRequest;
 import com.vvi.btb.domain.response.OTPResponse;
 import com.vvi.btb.service.abs.OTPService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
 import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.util.Map;
@@ -22,7 +20,7 @@ import static com.vvi.btb.constant.UserImplConstant.*;
 
 @Service
 @Slf4j
-public class OTPServiceImpl implements OTPService {
+public record OTPServiceImpl() implements OTPService {
     private static Map<Long, OTPResponse> cache = new ConcurrentHashMap<>();
 
     @Override
@@ -57,6 +55,7 @@ public class OTPServiceImpl implements OTPService {
     }
 
     private void vonageApi(OTPResponse otpResponse, long number) {
+
         VonageClient client = VonageClient.builder().apiKey("f6fd3928").apiSecret("6YHCb8wRvOj6cHcn").build();
         String NUMBER = String.valueOf(number);
         TextMessage message = new TextMessage(FROM, COUNTRY_CODE + NUMBER, MESSAGE_BODY);

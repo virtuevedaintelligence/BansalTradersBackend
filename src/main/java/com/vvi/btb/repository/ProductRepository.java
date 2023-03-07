@@ -6,6 +6,7 @@ import com.vvi.btb.domain.entity.Product;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,8 +25,10 @@ public record ProductRepository(ProductDao productDao){
     }
 
     public Product save(Product productToSave) {
+
         return productDao.save(productToSave);
     }
+
 
     public Optional<Product> findById(Long productId) {
         return productDao.findById(productId);
@@ -42,5 +45,8 @@ public record ProductRepository(ProductDao productDao){
 
     public Optional<Product> findByProductName(String productName) {
         return productDao.findByProductName(productName);
+    }
+    public Optional<Product> findByProductNameAndWeight(String productName, int weight) {
+        return productDao.findByProductNameAndWeight(productName,weight);
     }
 }

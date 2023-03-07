@@ -1,4 +1,4 @@
-package com.vvi.btb.controller;
+package com.vvi.btb.resource;
 
 import com.vvi.btb.domain.HttpResponse;
 import com.vvi.btb.domain.mapper.user.UserRegisterEntityMapper;

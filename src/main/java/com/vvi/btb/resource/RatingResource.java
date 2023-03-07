@@ -1,4 +1,4 @@
-package com.vvi.btb.controller;
+package com.vvi.btb.resource;
 
 import com.vvi.btb.constant.ProductImplConstant;
 import com.vvi.btb.constant.ReviewImplConstant;

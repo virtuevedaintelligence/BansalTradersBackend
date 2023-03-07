@@ -7,4 +7,5 @@ import java.util.Optional;
 
 public interface ProductDao extends JpaRepository<Product,Long> {
     Optional<Product> findByProductName(String productName);
+    Optional<Product> findByProductNameAndWeight(String productName, int weight);
 }
