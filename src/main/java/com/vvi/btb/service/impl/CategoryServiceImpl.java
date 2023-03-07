@@ -28,9 +28,11 @@ public record CategoryServiceImpl(CategoryDao categoryDao,
         Category category = new Category();
         CategoryResponse categoryResponse = new CategoryResponse();
         category.setCategoryName(categoryRequest.getCategoryName());
+        category.setCategoryType(categoryResponse.getCategoryType());
         try {
-            Category save = categoryDao.save(category);
-            categoryResponse.setCategoryName(save.getCategoryName());
+            Category savedCategory = categoryDao.save(category);
+            categoryResponse.setCategoryName(savedCategory.getCategoryName());
+            categoryResponse.setCategoryType(savedCategory.getCategoryType());
         }
         catch (Exception ex){
             throw new CategoryException(ex.getMessage(), CategoryImplConstant.CATEGORY_CREATE_ERROR_MESSAGE);
