@@ -45,7 +45,11 @@ public record ProductServiceImpl(ProductRepository productRepository,
     public ProductResponse updateProduct(Product product, ProductRequest productRequest)
             throws ProductException, CategoryException {
         try{
-            return getProductResponse(productRepository.save(extractedProduct(productRequest, product)));
+            if(productRequest.getWeight() != product.getWeight()){
+                return productResponseMapper.apply(addProductInformation(productRequest, Optional.ofNullable(product)));
+            }else {
+                return getProductResponse(productRepository.save(extractedProduct(productRequest, product)));
+            }
         }
         catch (Exception ex){
             throw new ProductException(ex.getMessage(),ProductImplConstant.PRODUCT_UPDATE_ERROR_MESSAGE);
@@ -154,6 +158,7 @@ public record ProductServiceImpl(ProductRepository productRepository,
         ProductInformation productInformation = new ProductInformation();
         productInformation.setWeight(productRequest.getWeight());
         productInformation.setProductPrice(productRequest.getProductPrice());
+        productInformation.setProductPriceWithOutDiscount(productRequest.getProductPriceWithoutDiscount());
         productInformation.setQuantity(productRequest.getQuantity());
         productInformation.setProduct(product.get());
         productInformationList.add(productInformation);

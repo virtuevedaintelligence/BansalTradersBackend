@@ -20,6 +20,7 @@ public class ProductInformation {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Long id;
     private int productPrice;
+    private int productPriceWithOutDiscount;
     private int quantity; // 10 packets 20 packets
     private int weight; // 250gm 500gm
     @ManyToOne

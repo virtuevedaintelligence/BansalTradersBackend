@@ -54,7 +54,7 @@ public class ProductResource {
     }
 
     @PutMapping("/updateProduct/{productId}")
-  //  @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+  //@PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<HttpResponse> updateProduct(@PathVariable("productId") Long productId,
                                                          @RequestBody ProductRequest productRequest)
             throws ProductException, CategoryException {
@@ -62,14 +62,22 @@ public class ProductResource {
         Optional<Product> productDetail = productRepository.findByProductNameAndWeight(productRequest.getProductName(),
                 productRequest.getWeight());
         if (!productDetail.isPresent()) {
-            return response.response(OK, ProductImplConstant.PRODUCT_NOT_FOUND_FOR_UPDATE, productDetail.get());
+            Optional<Product> product = productRepository.findById(productId);
+            if(!product.isPresent()){
+                return response.response(OK, ProductImplConstant.PRODUCT_NOT_FOUND_FOR_UPDATE, productDetail.get());
+            }else{
+                return updateProductWithDetails(productRequest, product);
+            }
         }
-        // add new weight quantity and size if not available
-        ProductResponse productResponse = productService.updateProduct(productDetail.get(), productRequest);
+        return updateProductWithDetails(productRequest, productDetail);
+    }
+
+    private ResponseEntity<HttpResponse> updateProductWithDetails(ProductRequest productRequest, Optional<Product> product) throws ProductException, CategoryException {
+        ProductResponse productResponse = productService.updateProduct(product.get(), productRequest);
         if (productResponse == null) {
-            return  response.response(OK, ProductImplConstant.PRODUCT_UPDATE_ERROR_MESSAGE,productResponse);
+            return response.response(OK, ProductImplConstant.PRODUCT_UPDATE_ERROR_MESSAGE, productResponse);
         }
-        return response.response(OK, ProductImplConstant.PRODUCT_UPDATED_SUCCESSFULLY,productResponse);
+        return response.response(OK, ProductImplConstant.PRODUCT_UPDATED_SUCCESSFULLY, productResponse);
     }
 
     @DeleteMapping("/delete/{productId}")
