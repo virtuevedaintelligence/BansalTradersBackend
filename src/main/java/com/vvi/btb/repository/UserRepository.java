@@ -45,7 +45,7 @@ public record UserRepository (UserDao userDao, EmailService emailService) {
 
     public User save(User user) throws UserException {
         try{
-          // emailService.sendMail(user);
+           emailService.sendMail(user);
            return userDao.save(user);
         }
         catch (Exception ex){

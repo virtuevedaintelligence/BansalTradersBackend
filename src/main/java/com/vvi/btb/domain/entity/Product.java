@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Entity
 @Table(name = "product")
@@ -38,6 +39,13 @@ public class Product {
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL,
             fetch = FetchType.LAZY, orphanRemoval=true)
     List<Order> orders;
+
+    @ManyToMany(targetEntity = User.class, cascade = { CascadeType.ALL })
+    @JoinTable(name = "FAV_PRODUCTS",
+            joinColumns = { @JoinColumn(name = "product_id") },
+            inverseJoinColumns = { @JoinColumn(name = "user_id") })
+    Set<User> users;
+
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL,
             fetch = FetchType.LAZY, orphanRemoval=true)
     private List<Review> reviews;

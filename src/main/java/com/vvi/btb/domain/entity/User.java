@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name="users")
@@ -30,6 +31,9 @@ public class User {
     private String profileImageUrl;
     private String ipAddress;
     private String roles;
+
+    @ManyToMany(mappedBy = "users")
+    Set<Product> products;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval=true)
     private List<ShippingAddress> shippingAddress;

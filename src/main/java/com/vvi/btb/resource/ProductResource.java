@@ -2,13 +2,16 @@ package com.vvi.btb.resource;
 
 
 import com.vvi.btb.constant.ProductImplConstant;
+import com.vvi.btb.constant.UserImplConstant;
 import com.vvi.btb.domain.HttpResponse;
 import com.vvi.btb.domain.entity.Product;
+import com.vvi.btb.domain.entity.User;
 import com.vvi.btb.domain.request.ProductRequest;
 import com.vvi.btb.domain.response.ProductResponse;
 import com.vvi.btb.exception.domain.CategoryException;
 import com.vvi.btb.exception.domain.ProductException;
 import com.vvi.btb.repository.ProductRepository;
+import com.vvi.btb.repository.UserRepository;
 import com.vvi.btb.service.abs.ProductService;
 import com.vvi.btb.util.Response;
 import lombok.extern.slf4j.Slf4j;
@@ -16,9 +19,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.OK;
@@ -31,11 +32,13 @@ public class ProductResource {
     private final ProductService productService;
     private final Response response;
     private final ProductRepository productRepository;
+    private final UserRepository userRepository;
     public ProductResource(ProductService productService, Response response,
-                           ProductRepository productRepository) {
+                           ProductRepository productRepository, UserRepository userRepository) {
         this.productService = productService;
         this.response = response;
         this.productRepository = productRepository;
+        this.userRepository = userRepository;
     }
 
     @PostMapping("/createProduct")
@@ -97,8 +100,8 @@ public class ProductResource {
     }
 
     @GetMapping("/getAllProducts")
-    public ResponseEntity<HttpResponse> getAllProducts(){
-        return response.response(OK,ProductImplConstant.PRODUCT_FETCHED_SUCESSFULLY, productService.getAllProducts());
+    public ResponseEntity<HttpResponse> getAllProducts(@RequestParam(required = false) Long userId){
+        return response.response(OK,ProductImplConstant.PRODUCT_FETCHED_SUCESSFULLY, productService.getAllProducts(userId));
     }
 
     @GetMapping("/productRating/{productId}")
@@ -111,4 +114,19 @@ public class ProductResource {
         return response.response(OK,ProductImplConstant.PRODUCT_FETCHED_SUCESSFULLY, productService.getProductRatings(productDetail));
     }
 
+    @GetMapping("/favorite/{productId}/{userId}")
+    //  @PreAuthorize("hasAuthority('ROLE_USER')")
+    public ResponseEntity<HttpResponse> favoriteProduct(@PathVariable ("productId") Long productId,
+                                                        @PathVariable ("userId") Long userId) throws ProductException {
+        Optional<ProductResponse> productDetail = productService.getProductDetail(productId);
+        if(productDetail.isEmpty()){
+            return response.response(NOT_FOUND, ProductImplConstant.PRODUCT_NOT_FOUND, productDetail);
+        }
+        Optional<User> user = userRepository.findUserById(userId);
+        if(user.isEmpty()){
+            return response.response(NOT_FOUND, UserImplConstant.USER_NOT_FOUND, user);
+        }
+        return response.response(OK,ProductImplConstant.PRODUCT_FETCHED_SUCESSFULLY,
+                productService.favoriteProduct(productDetail,user));
+    }
 }

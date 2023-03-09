@@ -4,6 +4,7 @@ import com.vvi.btb.constant.ProductImplConstant;
 import com.vvi.btb.dao.ProductInformationDao;
 import com.vvi.btb.domain.entity.Product;
 import com.vvi.btb.domain.entity.ProductInformation;
+import com.vvi.btb.domain.entity.User;
 import com.vvi.btb.domain.mapper.product.ProductEntityMapper;
 import com.vvi.btb.domain.mapper.product.ProductResponseMapper;
 import com.vvi.btb.domain.request.ProductRequest;
@@ -68,7 +69,7 @@ public record ProductServiceImpl(ProductRepository productRepository,
     }
 
     @Override
-    public List<ProductResponse> getAllProducts() {
+    public List<ProductResponse> getAllProducts(Long userId) {
         List<ProductResponse> productResponses = new ArrayList<>();
         productRepository.findAll().forEach(product -> productResponses.add(getProductResponse(product)));
         return productResponses;
@@ -133,6 +134,11 @@ public record ProductServiceImpl(ProductRepository productRepository,
            return new ProductRating(productName,totalReviews,ratingDetails);
        }
        return null;
+    }
+
+    @Override
+    public boolean favoriteProduct(Optional<ProductResponse> productDetail, Optional<User> user) {
+        return false;
     }
 
     private ProductResponse getProductResponse(Product product) {

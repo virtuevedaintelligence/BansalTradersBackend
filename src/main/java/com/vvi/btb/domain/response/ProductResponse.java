@@ -9,6 +9,7 @@ public record ProductResponse(
      String productDescription,
      boolean isFeatured,
      boolean isActive,
+     boolean isFavorite,
      String categoryName,
      String categoryType,
      String avgStarRating,

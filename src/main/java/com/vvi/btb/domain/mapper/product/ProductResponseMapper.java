@@ -3,6 +3,7 @@ package com.vvi.btb.domain.mapper.product;
 import com.vvi.btb.domain.entity.Product;
 import com.vvi.btb.domain.entity.ProductInformation;
 import com.vvi.btb.domain.entity.Review;
+import com.vvi.btb.domain.entity.User;
 import com.vvi.btb.domain.mapper.RatingMapper;
 import com.vvi.btb.domain.response.ProductInformationResponse;
 import com.vvi.btb.domain.response.ProductResponse;
@@ -29,6 +30,7 @@ public record ProductResponseMapper(RatingMapper ratingMapper,
                 product.getProductDescription(),
                 product.isFeatured(),
                 product.isActive(),
+                favorite(product),
                 product.getCategory().getCategoryName(),
                 product.getCategory().getCategoryType(),
                 product.getAverageRating(),
@@ -43,10 +45,23 @@ public record ProductResponseMapper(RatingMapper ratingMapper,
         }
         return null;
     }
+
     public List<ProductInformationResponse> of(List<ProductInformation> productInformation){
         if(!productInformation.isEmpty()){
             return productInformation.stream().map(productInformationResponseMapper).collect(Collectors.toList());
         }
         return null;
     }
+
+    private boolean favorite(Product product){
+        for (User user : product.getUsers()) {
+            for (Product userProduct : user.getProducts()) {
+                if (userProduct.getId().equals(product.getId())) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
 }
