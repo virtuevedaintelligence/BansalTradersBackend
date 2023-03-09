@@ -163,8 +163,9 @@ public record ProductServiceImpl(ProductRepository productRepository,
                 .stream()
                 .collect(Collectors.groupingBy(ProductInformation::getWeight));
         if(products.containsKey(productRequest.getWeight())){
-            setProductInformation(productRequest,
+            ProductInformation productInformation = setProductInformation(productRequest,
                     Objects.requireNonNull(products.get(productRequest.getWeight()).stream().findAny().orElse(null)));
+            products.put(productRequest.getWeight(), List.of(productInformation));
             productInformationDao.save(products.get(productRequest.getWeight()).get(0));
         }else{
             ProductInformation productInformation = new ProductInformation();
@@ -177,11 +178,12 @@ public record ProductServiceImpl(ProductRepository productRepository,
         return productRepository.save(product.get());
     }
 
-    private void setProductInformation(ProductRequest productRequest, ProductInformation information) {
+    private ProductInformation setProductInformation(ProductRequest productRequest, ProductInformation information) {
         information.setWeight(productRequest.getWeight());
         information.setProductPrice(productRequest.getProductPrice());
         information.setProductPriceWithOutDiscount(productRequest.getProductPriceWithoutDiscount());
         information.setQuantity(productRequest.getQuantity());
+        return information;
     }
 
     private List<ProductInformation> updateProductInformation(ProductRequest productRequest, Product product) {
