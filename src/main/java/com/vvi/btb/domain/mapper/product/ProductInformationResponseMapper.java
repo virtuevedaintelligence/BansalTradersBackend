@@ -12,7 +12,8 @@ public record ProductInformationResponseMapper() implements Function<ProductInfo
         return new ProductInformationResponse(
                 productInformation.getProductPrice(),
                 productInformation.getQuantity(),
-                productInformation.getWeight()
+                productInformation.getWeight(),
+                productInformation.getProductPriceWithOutDiscount()
         );
     }
 }

@@ -22,6 +22,5 @@ public interface ProductService {
     Optional<ProductResponse> getProductDetail(Long id);
     Optional<ProductResponse> getProductDetailToUpdate(String productName, int weight);
     ProductRating getProductRatings(Optional<ProductResponse> productResponse);
-
     boolean favoriteProduct(Optional<ProductResponse> productDetail, Optional<User> user);
 }

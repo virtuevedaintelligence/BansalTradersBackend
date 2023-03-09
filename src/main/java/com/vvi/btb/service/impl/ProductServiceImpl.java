@@ -19,9 +19,8 @@ import com.vvi.btb.service.abs.ProductService;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -160,24 +159,39 @@ public record ProductServiceImpl(ProductRepository productRepository,
     }
 
     private Product addProductInformation(ProductRequest productRequest, Optional<Product> product) {
-        List<ProductInformation> productInformationList = product.get().getProductInformation();
-        ProductInformation productInformation = new ProductInformation();
-        productInformation.setWeight(productRequest.getWeight());
-        productInformation.setProductPrice(productRequest.getProductPrice());
-        productInformation.setProductPriceWithOutDiscount(productRequest.getProductPriceWithoutDiscount());
-        productInformation.setQuantity(productRequest.getQuantity());
-        productInformation.setProduct(product.get());
-        productInformationList.add(productInformation);
-        product.get().setProductInformation(productInformationList);
-        productInformationDao.save(productInformation);
+        Map<Integer, List<ProductInformation>> products = product.get().getProductInformation()
+                .stream()
+                .collect(Collectors.groupingBy(ProductInformation::getWeight));
+        if(products.containsKey(productRequest.getWeight())){
+            setProductInformation(productRequest,
+                    Objects.requireNonNull(products.get(productRequest.getWeight()).stream().findAny().orElse(null)));
+            productInformationDao.save(products.get(productRequest.getWeight()).get(0));
+        }else{
+            ProductInformation productInformation = new ProductInformation();
+            setProductInformation(productRequest, productInformation);
+            productInformation.setProduct(product.get());
+            products.put(productRequest.getWeight(),List.of(productInformation));
+            productInformationDao.save(productInformation);
+        }
+        product.get().setProductInformation(products.get(productRequest.getWeight()));
         return productRepository.save(product.get());
     }
+
+    private void setProductInformation(ProductRequest productRequest, ProductInformation information) {
+        information.setWeight(productRequest.getWeight());
+        information.setProductPrice(productRequest.getProductPrice());
+        information.setProductPriceWithOutDiscount(productRequest.getProductPriceWithoutDiscount());
+        information.setQuantity(productRequest.getQuantity());
+    }
+
     private List<ProductInformation> updateProductInformation(ProductRequest productRequest, Product product) {
         List<ProductInformation> productInformationList = product.getProductInformation();
         for (ProductInformation productInformation : productInformationList) {
             if(productInformation.getWeight()==productRequest.getWeight()){
                 productInformation.setQuantity(productRequest.getQuantity());
                 productInformation.setProductPrice(productRequest.getProductPrice());
+                productInformation.setWeight(productRequest.getWeight());
+                productInformation.setProductPriceWithOutDiscount(productRequest.getProductPriceWithoutDiscount());
             }
             productInformationDao.save(productInformation);
         }
