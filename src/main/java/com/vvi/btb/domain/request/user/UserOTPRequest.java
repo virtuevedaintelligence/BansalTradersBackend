@@ -10,6 +10,6 @@ public class UserOTPRequest {
     @NotNull
     @Pattern(regexp = "^\\d{10}$")
     private String number;
-    @Pattern(regexp = "^\\d{6}$")
+//    @Pattern(regexp = "^\\d{6}$")
     private String otp;
 }

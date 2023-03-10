@@ -16,4 +16,9 @@ public record ProductResponse(
      List<ProductInformationResponse> productInformation,
      List<RatingResponse> ratingResponse
     ){
+
+    @Override
+    public boolean isFavorite() {
+        return isFavorite;
+    }
 }

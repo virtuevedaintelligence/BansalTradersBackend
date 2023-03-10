@@ -6,7 +6,9 @@ import com.vvi.btb.domain.entity.Product;
 import com.vvi.btb.domain.entity.ProductInformation;
 import com.vvi.btb.domain.entity.User;
 import com.vvi.btb.domain.mapper.product.ProductEntityMapper;
+import com.vvi.btb.domain.mapper.product.ProductFav;
 import com.vvi.btb.domain.mapper.product.ProductResponseMapper;
+import com.vvi.btb.domain.mapper.product.ProductResponseMapperFavorite;
 import com.vvi.btb.domain.request.ProductRequest;
 import com.vvi.btb.domain.response.ProductRating;
 import com.vvi.btb.domain.response.ProductResponse;
@@ -26,9 +28,10 @@ import java.util.stream.Collectors;
 @Service
 @Slf4j
 public record ProductServiceImpl(ProductRepository productRepository,
-                                ProductInformationDao productInformationDao,
-                                ProductResponseMapper productResponseMapper,
-                                ProductEntityMapper productEntityMapper) implements ProductService {
+                                 ProductInformationDao productInformationDao,
+                                 ProductResponseMapper productResponseMapper,
+                                 ProductEntityMapper productEntityMapper,
+                                 ProductResponseMapperFavorite productResponseMapperFavorite) implements ProductService {
 
 
     @Override
@@ -70,7 +73,7 @@ public record ProductServiceImpl(ProductRepository productRepository,
     @Override
     public List<ProductResponse> getAllProducts(Long userId) {
         List<ProductResponse> productResponses = new ArrayList<>();
-        productRepository.findAll().forEach(product -> productResponses.add(getProductResponse(product)));
+        productRepository.findAll().forEach(product -> productResponses.add(getProductResponseGetAll(product, userId)));
         return productResponses;
     }
 
@@ -142,6 +145,10 @@ public record ProductServiceImpl(ProductRepository productRepository,
 
     private ProductResponse getProductResponse(Product product) {
         return productResponseMapper.apply(product);
+    }
+
+    private ProductResponse getProductResponseGetAll(Product product, Long userId) {
+        return productResponseMapperFavorite.apply(new ProductFav(product,userId));
     }
 
 

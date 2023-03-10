@@ -1,17 +1,17 @@
 package com.vvi.btb.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
 import java.util.List;
 import java.util.Set;
 
 @Entity
 @Table(name="users")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -32,7 +32,8 @@ public class User {
     private String ipAddress;
     private String roles;
 
-    @ManyToMany(mappedBy = "users")
+    @JsonIgnore
+    @ManyToMany(mappedBy = "users", cascade = { CascadeType.ALL })
     Set<Product> products;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval=true)

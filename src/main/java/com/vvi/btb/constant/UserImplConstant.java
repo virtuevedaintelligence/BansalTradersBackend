@@ -11,6 +11,7 @@ public class UserImplConstant {
     public static String USER_CREATION_EXCEPTION =  "Error while creating Exception";
     public static String USER_REGISTERED_SUCCESSFULLY =  "User Registration success";
     public static String USER_OTP_VERIFIED =   "User OTP Verified";
+    public static String USER_MUST_BE_LOGGED_IN ="User must be logged in inorder to favorite the product";
     public static String USER_OTP_NOT_VERIFIED =  "User OTP Not Verified";
     public static String USER_GENERATE_OTP =  "Please Generate OTP";
     public static String USER_LOGGED_SUCCESS =  "User logged in successfully";

@@ -3,10 +3,7 @@ package com.vvi.btb.domain.entity;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.vvi.btb.constant.ReviewImplConstant;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.text.DecimalFormat;
 import java.util.List;
@@ -15,7 +12,8 @@ import java.util.Set;
 
 @Entity
 @Table(name = "product")
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -40,7 +38,8 @@ public class Product {
             fetch = FetchType.LAZY, orphanRemoval=true)
     List<Order> orders;
 
-    @ManyToMany(targetEntity = User.class, cascade = { CascadeType.ALL })
+
+    @ManyToMany( cascade = { CascadeType.ALL })
     @JoinTable(name = "FAV_PRODUCTS",
             joinColumns = { @JoinColumn(name = "product_id") },
             inverseJoinColumns = { @JoinColumn(name = "user_id") })

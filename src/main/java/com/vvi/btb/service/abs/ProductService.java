@@ -7,6 +7,7 @@ import com.vvi.btb.domain.response.ProductRating;
 import com.vvi.btb.domain.response.ProductResponse;
 import com.vvi.btb.exception.domain.CategoryException;
 import com.vvi.btb.exception.domain.ProductException;
+import com.vvi.btb.exception.domain.UserException;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,5 +23,5 @@ public interface ProductService {
     Optional<ProductResponse> getProductDetail(Long id);
     Optional<ProductResponse> getProductDetailToUpdate(String productName, int weight);
     ProductRating getProductRatings(Optional<ProductResponse> productResponse);
-    boolean favoriteProduct(Optional<ProductResponse> productDetail, Optional<User> user);
+    boolean favoriteProduct(Optional<ProductResponse> productDetail, Optional<User> user) throws ProductException, UserException;
 }

@@ -10,6 +10,7 @@ import com.vvi.btb.domain.request.ProductRequest;
 import com.vvi.btb.domain.response.ProductResponse;
 import com.vvi.btb.exception.domain.CategoryException;
 import com.vvi.btb.exception.domain.ProductException;
+import com.vvi.btb.exception.domain.UserException;
 import com.vvi.btb.repository.ProductRepository;
 import com.vvi.btb.repository.UserRepository;
 import com.vvi.btb.service.abs.ProductService;
@@ -21,8 +22,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
-import static org.springframework.http.HttpStatus.NOT_FOUND;
-import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.http.HttpStatus.*;
 
 @CrossOrigin("*")
 @RestController
@@ -117,16 +117,20 @@ public class ProductResource {
     @GetMapping("/favorite/{productId}/{userId}")
     //  @PreAuthorize("hasAuthority('ROLE_USER')")
     public ResponseEntity<HttpResponse> favoriteProduct(@PathVariable ("productId") Long productId,
-                                                        @PathVariable ("userId") Long userId) throws ProductException {
+                                                        @PathVariable ("userId") Long userId)
+            throws ProductException, UserException {
         Optional<ProductResponse> productDetail = productService.getProductDetail(productId);
         if(productDetail.isEmpty()){
             return response.response(NOT_FOUND, ProductImplConstant.PRODUCT_NOT_FOUND, productDetail);
         }
         Optional<User> user = userRepository.findUserById(userId);
         if(user.isEmpty()){
-            return response.response(NOT_FOUND, UserImplConstant.USER_NOT_FOUND, user);
+            return response.response(NOT_FOUND, UserImplConstant.USER_MUST_BE_LOGGED_IN, user);
         }
-        return response.response(OK,ProductImplConstant.PRODUCT_FETCHED_SUCESSFULLY,
-                productService.favoriteProduct(productDetail,user));
+        if(productService.favoriteProduct(productDetail, user)){
+          return response.response(OK, ProductImplConstant.PRODUCT_MARKED_FAVORITE,
+                    productService.favoriteProduct(productDetail, user));
+        }
+       return response.response(BAD_GATEWAY, ProductImplConstant.PRODUCT_NOT_MARKED_FAVORITE, productDetail.get());
     }
 }

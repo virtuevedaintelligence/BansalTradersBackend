@@ -36,11 +36,7 @@ public record UserResource(Response response, UserService userService,
 ) {
 
     @PostMapping("/generateOTP")
-    public ResponseEntity<HttpResponse> generateOTP(@RequestBody @Valid UserOTPRequest userOTPRequest,
-                                                            BindingResult errors) throws UserException {
-        if(errors.hasErrors()){
-
-        }
+    public ResponseEntity<HttpResponse> generateOTP(@RequestBody UserOTPRequest userOTPRequest) throws UserException {
         if(userService.findUserByContactNumber(Long.valueOf(userOTPRequest.getNumber())).isPresent()){
             Optional<OTPResponse> otpResponse = otpService.sendOTP(Long.parseLong(userOTPRequest.getNumber()));
             if(otpResponse.isPresent()){
