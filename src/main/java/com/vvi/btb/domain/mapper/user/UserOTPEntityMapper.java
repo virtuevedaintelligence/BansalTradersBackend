@@ -13,7 +13,7 @@ public record UserOTPEntityMapper(PasswordEncoder passwordEncoder) implements Fu
     public User apply(UserOTPRequest userOTPRequest) {
         return User
                 .builder()
-                .firstName(String.valueOf(userOTPRequest.getOtp()))
+                .firstName(String.valueOf(userOTPRequest.getNumber()))
                 .lastName(String.valueOf(userOTPRequest.getNumber()))
                 .userName(String.valueOf(userOTPRequest.getNumber()))
                 .password(passwordEncoder.encode(String.valueOf(userOTPRequest.getNumber())))

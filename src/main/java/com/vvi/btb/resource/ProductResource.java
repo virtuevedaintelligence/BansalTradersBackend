@@ -100,7 +100,7 @@ public class ProductResource {
     }
 
     @GetMapping("/getAllProducts")
-    public ResponseEntity<HttpResponse> getAllProducts(@RequestParam(required = false) Long userId){
+    public ResponseEntity<HttpResponse> getAllProducts(@RequestParam(name = "userId" , required = false) Long userId){
         return response.response(OK,ProductImplConstant.PRODUCT_FETCHED_SUCESSFULLY, productService.getAllProducts(userId));
     }
 

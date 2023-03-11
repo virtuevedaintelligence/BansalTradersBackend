@@ -11,6 +11,7 @@ public record UserResponseMapper(JwtService jwtService) implements Function<User
     @Override
     public UserResponse apply(User user) {
         return new UserResponse(
+                user.getId(),
                 user.getFirstName(),
                 user.getLastName(),
                 user.getUserName(),

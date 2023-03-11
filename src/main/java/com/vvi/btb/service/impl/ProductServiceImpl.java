@@ -16,7 +16,9 @@ import com.vvi.btb.domain.response.RatingDetail;
 import com.vvi.btb.domain.response.RatingResponse;
 import com.vvi.btb.exception.domain.CategoryException;
 import com.vvi.btb.exception.domain.ProductException;
+import com.vvi.btb.exception.domain.UserException;
 import com.vvi.btb.repository.ProductRepository;
+import com.vvi.btb.repository.UserRepository;
 import com.vvi.btb.service.abs.ProductService;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -25,13 +27,17 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.vvi.btb.constant.ProductImplConstant.PRODUCT_NOT_FOUND;
+import static com.vvi.btb.constant.ProductImplConstant.PRODUCT_NOT_MARKED_FAVORITE;
+
 @Service
 @Slf4j
 public record ProductServiceImpl(ProductRepository productRepository,
                                  ProductInformationDao productInformationDao,
                                  ProductResponseMapper productResponseMapper,
                                  ProductEntityMapper productEntityMapper,
-                                 ProductResponseMapperFavorite productResponseMapperFavorite) implements ProductService {
+                                 ProductResponseMapperFavorite productResponseMapperFavorite,
+                                 UserRepository userRepository) implements ProductService {
 
 
     @Override
@@ -139,8 +145,26 @@ public record ProductServiceImpl(ProductRepository productRepository,
     }
 
     @Override
-    public boolean favoriteProduct(Optional<ProductResponse> productDetail, Optional<User> user) {
-        return false;
+    public boolean favoriteProduct(Optional<ProductResponse> productDetail, Optional<User> userOptional)
+            throws ProductException, UserException {
+
+        boolean favorite = false;
+        try {
+            Product product = productRepository.findById(productDetail.get().productId())
+                    .orElseThrow(() -> new ProductException(PRODUCT_NOT_FOUND, PRODUCT_NOT_MARKED_FAVORITE));
+            Set<Product> products = new HashSet<>();
+            products.add(product);
+            User user = userOptional.get();
+            Set<User> users = new HashSet<>();
+            users.add(user);
+            user.setProducts(products);
+            product.setUsers(users);
+            userRepository.save(user);
+            favorite = true;
+        } catch (Exception | ProductException ex) {
+            throw new ProductException(PRODUCT_NOT_FOUND, PRODUCT_NOT_MARKED_FAVORITE);
+        }
+        return favorite;
     }
 
     private ProductResponse getProductResponse(Product product) {
