@@ -2,11 +2,13 @@ package com.vvi.btb.resource;
 
 import com.vvi.btb.constant.CategoryImplConstant;
 import com.vvi.btb.domain.HttpResponse;
-import com.vvi.btb.domain.request.CategoryRequest;
+import com.vvi.btb.domain.request.category.CategoryRequest;
+import com.vvi.btb.domain.request.category.CategoryRequests;
 import com.vvi.btb.domain.response.CategoryResponse;
 import com.vvi.btb.exception.domain.CategoryException;
 import com.vvi.btb.service.abs.CategoryService;
 import com.vvi.btb.util.Response;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +20,7 @@ import static org.springframework.http.HttpStatus.OK;
 @CrossOrigin("*")
 @RestController
 @RequestMapping("/v1/categories")
+@Slf4j
 public class CategoryResource {
 
     private final CategoryService categoryService;
@@ -37,6 +40,14 @@ public class CategoryResource {
         }
         CategoryResponse categoryResponse = categoryService.saveCategory(categoryRequest);
         return response.response(CREATED, CategoryImplConstant.CATEGORY_ADDED_SUCCESSFULLY, categoryResponse);
+    }
+
+    @PostMapping("/importCategories")
+    //@PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    public ResponseEntity<HttpResponse> importCategories(@RequestBody CategoryRequests categoryRequests) throws CategoryException {
+        log.info("Inside importCategories");
+        return response.response(CREATED, CategoryImplConstant.CATEGORY_ADDED_SUCCESSFULLY,
+                categoryService.importCategories(categoryRequests));
     }
 
     @PutMapping("/updateCategory/{id}")

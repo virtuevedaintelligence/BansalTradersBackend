@@ -9,7 +9,8 @@ import com.vvi.btb.domain.mapper.product.ProductEntityMapper;
 import com.vvi.btb.domain.mapper.product.ProductFav;
 import com.vvi.btb.domain.mapper.product.ProductResponseMapper;
 import com.vvi.btb.domain.mapper.product.ProductResponseMapperFavorite;
-import com.vvi.btb.domain.request.ProductRequest;
+import com.vvi.btb.domain.request.product.ProductRequest;
+import com.vvi.btb.domain.request.product.ProductRequests;
 import com.vvi.btb.domain.response.ProductRating;
 import com.vvi.btb.domain.response.ProductResponse;
 import com.vvi.btb.domain.response.RatingDetail;
@@ -24,6 +25,7 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -48,6 +50,15 @@ public record ProductServiceImpl(ProductRepository productRepository,
         }else{
             return getProductResponse(productRepository.save(productEntityMapper.apply(productRequest)));
         }
+    }
+
+    @Override
+    public boolean saveProducts(ProductRequests productRequests) throws ProductException, CategoryException, IOException {
+        List<Product> products = productRequests.getProductRequests()
+                .stream()
+                .map(productEntityMapper::apply)
+                .collect(Collectors.toList());
+        return productRepository.saveAll(products);
     }
 
     @Override

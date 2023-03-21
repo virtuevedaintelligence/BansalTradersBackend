@@ -1,4 +1,4 @@
-package com.vvi.btb.domain.request;
+package com.vvi.btb.domain.request.category;
 
 import lombok.Data;
 import java.io.Serializable;

@@ -11,4 +11,5 @@ public class CategoryImplConstant {
     public static final String CATEGORY_DELETE_ERROR_MESSAGE =" Exception while Deleting Category";
     public static final String CATEGORY_NOT_FOUND = " Category not Found";
     public static final String CATEGORY_FETCHED_SUCCESSFULLY = " Category Fetch Successfully";
+
 }

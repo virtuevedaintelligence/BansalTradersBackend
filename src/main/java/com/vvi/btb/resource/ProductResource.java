@@ -6,7 +6,8 @@ import com.vvi.btb.constant.UserImplConstant;
 import com.vvi.btb.domain.HttpResponse;
 import com.vvi.btb.domain.entity.Product;
 import com.vvi.btb.domain.entity.User;
-import com.vvi.btb.domain.request.ProductRequest;
+import com.vvi.btb.domain.request.product.ProductRequest;
+import com.vvi.btb.domain.request.product.ProductRequests;
 import com.vvi.btb.domain.response.ProductResponse;
 import com.vvi.btb.exception.domain.CategoryException;
 import com.vvi.btb.exception.domain.ProductException;
@@ -20,6 +21,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.Optional;
 
 import static org.springframework.http.HttpStatus.*;
@@ -55,6 +57,15 @@ public class ProductResource {
         ProductResponse productResponse = productService.saveProduct(productRequest);
         return response.response(OK, ProductImplConstant.PRODUCT_ADDED_SUCCESSFULLY,productResponse);
     }
+
+    @PostMapping("/importProducts")
+    // @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    public ResponseEntity<HttpResponse> importProducts(@RequestBody ProductRequests productRequests)
+            throws ProductException, CategoryException, IOException {
+        log.info("Importing Products Started");
+        return response.response(OK, ProductImplConstant.PRODUCT_ADDED_SUCCESSFULLY, productService.saveProducts(productRequests));
+    }
+
 
     @PutMapping("/updateProduct/{productId}")
   //@PreAuthorize("hasAuthority('ROLE_ADMIN')")

@@ -1,4 +1,4 @@
-package com.vvi.btb.domain.mapper;
+package com.vvi.btb.domain.mapper.category;
 
 import com.vvi.btb.domain.entity.Category;
 import com.vvi.btb.domain.response.CategoryResponse;

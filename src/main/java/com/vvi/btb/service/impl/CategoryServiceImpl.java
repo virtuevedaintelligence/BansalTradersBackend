@@ -1,9 +1,12 @@
 package com.vvi.btb.service.impl;
 
 import com.vvi.btb.constant.CategoryImplConstant;
+import com.vvi.btb.constant.CommonImplConstant;
 import com.vvi.btb.domain.entity.Category;
-import com.vvi.btb.domain.mapper.CategoryMapper;
-import com.vvi.btb.domain.request.CategoryRequest;
+import com.vvi.btb.domain.mapper.category.CategoryEntityMapper;
+import com.vvi.btb.domain.mapper.category.CategoryMapper;
+import com.vvi.btb.domain.request.category.CategoryRequest;
+import com.vvi.btb.domain.request.category.CategoryRequests;
 import com.vvi.btb.domain.response.CategoryResponse;
 import com.vvi.btb.exception.domain.CategoryException;
 import com.vvi.btb.dao.CategoryDao;
@@ -18,7 +21,8 @@ import java.util.Optional;
 @Service
 @Slf4j
 public record CategoryServiceImpl(CategoryDao categoryDao,
-                                  CategoryMapper categoryMapper) implements CategoryService {
+                                  CategoryMapper categoryMapper,
+                                  CategoryEntityMapper categoryEntityMapper) implements CategoryService {
 
 
 
@@ -56,6 +60,20 @@ public record CategoryServiceImpl(CategoryDao categoryDao,
             }
         }
         return categoryResponse;
+    }
+
+    @Override
+    public boolean importCategories(CategoryRequests categoryRequests) throws CategoryException {
+        try {
+            List<Category> categories = categoryRequests
+                    .getCategoryRequests().stream()
+                    .map(categoryEntityMapper::apply).toList();
+            categoryDao.saveAll(categories);
+            return true;
+        }
+        catch (Exception ex){
+            throw new CategoryException(ex.getMessage(), CommonImplConstant.PLEASE_CONTACT_ADMIN);
+        }
     }
 
     @Override

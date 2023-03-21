@@ -5,11 +5,10 @@ import com.vvi.btb.dao.CategoryDao;
 import com.vvi.btb.domain.entity.Category;
 import com.vvi.btb.domain.entity.Product;
 import com.vvi.btb.domain.entity.ProductInformation;
-import com.vvi.btb.domain.request.ProductRequest;
+import com.vvi.btb.domain.request.product.ProductRequest;
 import com.vvi.btb.exception.domain.CategoryException;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Component;
-import org.w3c.dom.stylesheets.LinkStyle;
 
 import java.util.List;
 import java.util.Optional;
@@ -55,10 +54,10 @@ public record ProductEntityMapper(CategoryDao categoryDao) implements Function<P
                 .build());
     }
     public boolean setFeatured(ProductRequest productRequest) {
-        return productRequest.getFeatured().equals(ON);
+        return productRequest.getFeatured().equals(ON) || productRequest.getFeatured().equals("1");
     }
 
     public boolean setActive(ProductRequest productRequest){
-        return productRequest.getIsactive().equals(ON);
+        return productRequest.getIsactive().equals(ON) || productRequest.getIsactive().equals("1");
     }
 }
