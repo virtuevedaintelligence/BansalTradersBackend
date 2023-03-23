@@ -9,7 +9,6 @@ import com.vvi.btb.domain.request.product.ProductRequest;
 import com.vvi.btb.exception.domain.CategoryException;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Component;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
@@ -50,6 +49,7 @@ public record ProductEntityMapper(CategoryDao categoryDao) implements Function<P
                 .quantity(productRequest.getQuantity())
                 .productPrice(productRequest.getProductPrice())
                 .weight(productRequest.getWeight())
+                .productPriceWithOutDiscount(productRequest.getProductPriceWithoutDiscount())
                 .product(product)
                 .build());
     }
