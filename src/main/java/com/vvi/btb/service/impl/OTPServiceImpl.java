@@ -41,6 +41,7 @@ public record OTPServiceImpl() implements OTPService {
             success = getOtpResponse(success, count, number);
             cache.put(number, success);
         }
+        log.info(" " + success.getOtp());
         return Optional.ofNullable(success);
     }
 

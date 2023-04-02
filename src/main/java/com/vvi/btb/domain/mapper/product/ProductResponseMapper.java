@@ -54,6 +54,7 @@ public record ProductResponseMapper(RatingMapper ratingMapper,
     }
 
     private boolean favorite(Product product){
+        if(product.getUsers().size() < 1) return false;
         for (User user : product.getUsers()) {
             for (Product userProduct : user.getProducts()) {
                 if (userProduct.getId().equals(product.getId())) {

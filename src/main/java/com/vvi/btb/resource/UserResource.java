@@ -81,10 +81,10 @@ public record UserResource(Response response, UserService userService,
     @PostMapping("/login")
     public ResponseEntity<HttpResponse> login(@RequestBody UserLoginRequest userLoginRequest) throws UserException {
         Authentication authenticate = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(userLoginRequest.getUserName(),
+                new UsernamePasswordAuthenticationToken(userLoginRequest.getUsername(),
                         userLoginRequest.getPassword()));
         if(authenticate.isAuthenticated()){
-            Optional<UserResponse> user = userService.findUserByName(userLoginRequest.getUserName());
+            Optional<UserResponse> user = userService.findUserByName(userLoginRequest.getUsername());
             return response.response(OK, ADMIN_LOGGED_SUCCESS, user.get());
         }
         return response.response(BAD_GATEWAY, ADMIN_NOT_LOGGED_SUCCESS,null);

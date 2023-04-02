@@ -3,6 +3,7 @@ package com.vvi.btb.domain.request.product;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.List;
 
 @Data
 public class ProductRequest implements Serializable {
@@ -13,7 +14,7 @@ public class ProductRequest implements Serializable {
     private int productPriceWithoutDiscount;
     private int quantity; // 10 packets 20 packets
     private int weight; // 250gm 500gm
-    private String featured;
-    private String isactive;
+    private List<String> featured;
+    private List<String> isactive;
     private String categoryName;
 }

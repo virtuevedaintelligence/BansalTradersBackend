@@ -19,6 +19,7 @@ import com.vvi.btb.util.Response;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -44,7 +45,7 @@ public class ProductResource {
     }
 
     @PostMapping("/createProduct")
-   // @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<HttpResponse> createProduct(@RequestBody ProductRequest productRequest)
             throws ProductException, CategoryException {
         Optional<ProductResponse> product = productService.getProductByNameAndWeight(productRequest.getProductName(),
