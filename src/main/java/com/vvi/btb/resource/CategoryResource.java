@@ -70,6 +70,6 @@ public class CategoryResource {
 
     @GetMapping("/getAllCategories")
     public ResponseEntity<HttpResponse> getAllCategories() {
-         return response.response(OK,CategoryImplConstant.CATEGORY_FETCHED_SUCCESSFULLY,categoryService.getAllCategories());
+         return response.response(OK,CategoryImplConstant.CATEGORY_FETCHED_SUCCESSFULLY, categoryService.getAllCategories());
     }
 }

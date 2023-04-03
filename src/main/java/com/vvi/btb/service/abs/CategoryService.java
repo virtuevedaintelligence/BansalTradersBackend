@@ -5,7 +5,7 @@ import com.vvi.btb.domain.request.category.CategoryRequests;
 import com.vvi.btb.domain.response.CategoryResponse;
 import com.vvi.btb.exception.domain.CategoryException;
 
-import java.util.List;
+import java.util.Deque;
 
 public interface CategoryService {
 
@@ -15,7 +15,7 @@ public interface CategoryService {
     boolean importCategories(CategoryRequests categoryRequests) throws CategoryException;
     boolean deleteCategory(Long id) throws CategoryException;
 
-    List<CategoryResponse> getAllCategories();
+    Deque<CategoryResponse> getAllCategories();
 
     CategoryResponse getCategoryByName(String categoryName) throws CategoryException;
 }

@@ -14,9 +14,7 @@ import com.vvi.btb.service.abs.CategoryService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -88,7 +86,7 @@ public record CategoryServiceImpl(CategoryDao categoryDao,
     }
 
     @Override
-    public List<CategoryResponse> getAllCategories() {
+    public Deque<CategoryResponse> getAllCategories() {
         return buildCategories(categoryDao.findAll());
     }
 
@@ -105,11 +103,12 @@ public record CategoryServiceImpl(CategoryDao categoryDao,
         return categoryResponse;
     }
 
-    private List<CategoryResponse> buildCategories(List<Category> categories){
-        List<CategoryResponse> categoryResponses = new ArrayList<>();
+    private Deque<CategoryResponse> buildCategories(List<Category> categories){
+        Deque<CategoryResponse> categoryResponses = new LinkedList<>();
         categories.forEach(category -> {
             categoryResponses.add(categoryMapper.apply(category));
         });
+        categoryResponses.addFirst(new CategoryResponse(101L,"all","Dryfruit"));
         return categoryResponses;
     }
 }
