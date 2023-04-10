@@ -11,6 +11,7 @@ import com.vvi.btb.util.Response;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import static com.vvi.btb.constant.CategoryImplConstant.CATEGORY_DELETED_SUCCESSFULLY;
 import static com.vvi.btb.constant.CategoryImplConstant.PLEASE_CONTACT_ADMIN;
@@ -32,7 +33,7 @@ public class CategoryResource {
     }
 
     @PostMapping("/createCategory")
-    //@PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<HttpResponse> createCategory(@RequestBody CategoryRequest categoryRequest) throws CategoryException {
         CategoryResponse category = categoryService.getCategoryByName(categoryRequest.getCategoryName());
         if(category != null){
@@ -43,7 +44,7 @@ public class CategoryResource {
     }
 
     @PostMapping("/importCategories")
-    //@PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<HttpResponse> importCategories(@RequestBody CategoryRequests categoryRequests) throws CategoryException {
         log.info("Inside importCategories");
         return response.response(CREATED, CategoryImplConstant.CATEGORY_ADDED_SUCCESSFULLY,
@@ -51,7 +52,7 @@ public class CategoryResource {
     }
 
     @PutMapping("/updateCategory/{id}")
-   // @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<HttpResponse> updateCategory(@PathVariable("id") long id, @RequestBody CategoryRequest category) throws CategoryException {
         CategoryResponse categoryResponse = categoryService.updateCategory(id, category);
         if(categoryResponse == null){
@@ -62,7 +63,7 @@ public class CategoryResource {
     }
 
     @DeleteMapping("/delete/{categoryId}")
-  //  @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<HttpResponse> deleteCategory(@PathVariable("categoryId") Long categoryId) throws CategoryException {
         categoryService.deleteCategory(categoryId);
         return response.response(OK, CATEGORY_DELETED_SUCCESSFULLY, null);
