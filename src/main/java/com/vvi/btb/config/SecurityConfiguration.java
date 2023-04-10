@@ -19,7 +19,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import static com.vvi.btb.constant.SecurityContant.*;
+import static com.vvi.btb.constant.SecurityConstant.*;
 
 @Configuration
 @EnableWebSecurity
@@ -40,6 +40,8 @@ public class SecurityConfiguration {
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity.csrf().disable()
                 .authorizeHttpRequests()
+                .requestMatchers(HttpMethod.POST, PUBLIC_URLS)
+                .permitAll()
                 .requestMatchers(PUBLIC_URLS)
                 .permitAll()
                 .anyRequest()

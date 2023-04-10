@@ -3,16 +3,18 @@ package com.vvi.btb.domain.entity;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Entity
-@Table(name = "orders")
+@Table(name = "order")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Order {
 
     @Id
@@ -41,7 +43,7 @@ public class Order {
     @JoinColumn(name = "user_id", nullable=false)
     private User user;
 
-    @OneToMany
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval=true)
     @JoinColumn()
     private List<OrderProducts> orderProducts;
 }

@@ -22,11 +22,19 @@ public record OrderResource(OrderService orderService) {
         return null;
     }
 
+    @DeleteMapping("/cancelOrder/{orderId}")
     public ResponseEntity<HttpResponse> cancelOrder(@PathVariable("orderId") Long orderId){
         return null;
     }
 
-    public ResponseEntity<HttpResponse> getAllOrders(@PathVariable("orderId") Long orderId){
+    @GetMapping("/getSingleOrder/{orderId}/{userId}")
+    public ResponseEntity<HttpResponse> getSingleOrder(@PathVariable("orderId") Long orderId, @PathVariable("userId") Long userId) {
         return null;
     }
+
+    @GetMapping("/getAllOrders")
+    public ResponseEntity<HttpResponse> getAllOrders(@RequestParam Long userId) {
+        return null;
+    }
+
 }

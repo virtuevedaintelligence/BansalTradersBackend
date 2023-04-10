@@ -60,7 +60,7 @@ public class ProductResource {
     }
 
     @PostMapping("/importProducts")
-    // @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<HttpResponse> importProducts(@RequestBody ProductRequests productRequests)
             throws ProductException, CategoryException, IOException {
         log.info("Importing Products Started");
@@ -69,7 +69,7 @@ public class ProductResource {
 
 
     @PutMapping("/updateProduct/{productId}")
-  //@PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<HttpResponse> updateProduct(@PathVariable("productId") Long productId,
                                                          @RequestBody ProductRequest productRequest)
             throws ProductException, CategoryException {

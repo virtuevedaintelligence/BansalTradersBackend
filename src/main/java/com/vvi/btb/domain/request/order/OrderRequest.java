@@ -13,6 +13,6 @@ public class OrderRequest {
     private String orderPlacedDate;
     private int totalOrderPrice;
     private List<OrderedProducts> orderedProducts;
-    int userId;
+    long userId;
     String payment;
 }

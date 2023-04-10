@@ -4,6 +4,7 @@ package com.vvi.btb.domain.entity;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -12,6 +13,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class OrderProducts {
 
     @Id
@@ -26,4 +28,8 @@ public class OrderProducts {
     private int totalPrice;
     private String name;
     private String category;
+
+    @ManyToOne
+    @JoinColumn(name="order_id")
+    private Order order;
 }
