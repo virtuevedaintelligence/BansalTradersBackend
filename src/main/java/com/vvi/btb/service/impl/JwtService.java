@@ -1,6 +1,6 @@
 package com.vvi.btb.service.impl;
 
-import com.vvi.btb.constant.SecurityContant;
+import com.vvi.btb.constant.SecurityConstants;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -62,7 +62,7 @@ public class JwtService{
     }
 
     private Key getSignKey() {
-        byte[] keyBytes= Decoders.BASE64.decode(SecurityContant.SECRET);
+        byte[] keyBytes= Decoders.BASE64.decode(SecurityConstants.SECRET);
         return Keys.hmacShaKeyFor(keyBytes);
     }
 }

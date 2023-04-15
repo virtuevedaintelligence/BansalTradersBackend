@@ -4,7 +4,6 @@ import com.vvi.btb.filter.JwtAuthFilter;
 import com.vvi.btb.service.security.UserDetailsServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -19,7 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import static com.vvi.btb.constant.SecurityContant.*;
+import static com.vvi.btb.constant.SecurityConstants.*;
 
 @Configuration
 @EnableWebSecurity

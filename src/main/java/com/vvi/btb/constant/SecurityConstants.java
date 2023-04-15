@@ -1,6 +1,6 @@
 package com.vvi.btb.constant;
 
-public class SecurityContant {
+public class SecurityConstants {
 
     public static final String[] PUBLIC_URLS = {
                                                 "/v1/products/getAllProducts",
