@@ -1,0 +1,18 @@
+version: '3.8'
+services:
+  mysql:
+    container_name: mysql_b
+    image: mysql/mysql-server:5.7
+    ports:
+      - "3307:3306"
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: bansaltraders
+      MYSQL_USER: bansaluser
+      MYSQL_PASSWORD: bansalpassword
+    volumes:
+      - mysql-database-data-volume:/var/lib/mysql
+
+volumes:
+  mysql-database-data-volume:
