@@ -61,7 +61,7 @@ public class ProductResource {
     }
 
     @PostMapping("/importProducts")
-    // @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<HttpResponse> importProducts(@RequestBody ProductRequests productRequests)
             throws ProductException, CategoryException, IOException {
         log.info("Importing Products Started");
@@ -70,7 +70,7 @@ public class ProductResource {
 
 
     @PutMapping("/updateProduct/{productId}")
-  //@PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<HttpResponse> updateProduct(@PathVariable("productId") Long productId,
                                                          @RequestBody ProductRequest productRequest)
             throws ProductException, CategoryException {
@@ -97,7 +97,7 @@ public class ProductResource {
     }
 
     @DeleteMapping("/delete/{productId}")
-   // @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<HttpResponse> deleteProduct(@PathVariable("productId") Long productId) throws ProductException {
         productService.deleteProduct(productId);
         return response.response(OK, ProductImplConstant.PRODUCT_DELETED_SUCCESSFULLY,null);
@@ -118,7 +118,7 @@ public class ProductResource {
     }
 
     @GetMapping("/productRating/{productId}")
-  //  @PreAuthorize("hasAuthority('ROLE_USER')")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
     public ResponseEntity<HttpResponse> getProductRatings(@PathVariable ("productId") Long productId) throws ProductException {
         Optional<ProductResponse> productDetail = productService.getProductDetail(productId);
         if(productDetail.isPresent()){
@@ -128,7 +128,7 @@ public class ProductResource {
     }
 
     @GetMapping("/favorite/{productId}/{userId}")
-    //  @PreAuthorize("hasAuthority('ROLE_USER')")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
     public ResponseEntity<HttpResponse> favoriteProduct(@PathVariable ("productId") Long productId,
                                                         @PathVariable ("userId") Long userId)
             throws ProductException, UserException {
