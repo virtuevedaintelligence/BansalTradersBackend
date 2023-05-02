@@ -23,8 +23,15 @@ import static org.springframework.http.HttpStatus.OK;
 @RestController
 @RequestMapping("/v1/categories")
 @Slf4j
-public record CategoryResource(CategoryService categoryService,
-                               Response response) {
+public class CategoryResource {
+
+    private final CategoryService categoryService;
+    private final Response response;
+
+    public CategoryResource(CategoryService categoryService, Response response) {
+        this.categoryService = categoryService;
+        this.response = response;
+    }
 
     @PostMapping("/createCategory")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")

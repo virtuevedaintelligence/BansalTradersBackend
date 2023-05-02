@@ -32,10 +32,18 @@ import static org.springframework.http.HttpStatus.*;
 @RestController
 @RequestMapping("/v1/products")
 @Slf4j
-public record ProductResource(ProductService productService,
-                              Response response,
-                              ProductRepository productRepository,
-                              UserRepository userRepository) {
+public class ProductResource {
+    private final ProductService productService;
+    private final Response response;
+    private final ProductRepository productRepository;
+    private final UserRepository userRepository;
+    public ProductResource(ProductService productService, Response response,
+                           ProductRepository productRepository, UserRepository userRepository) {
+        this.productService = productService;
+        this.response = response;
+        this.productRepository = productRepository;
+        this.userRepository = userRepository;
+    }
 
     @PostMapping("/createProduct")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")

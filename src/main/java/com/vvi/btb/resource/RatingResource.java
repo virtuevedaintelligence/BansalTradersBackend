@@ -24,15 +24,25 @@ import java.util.Optional;
 
 import static org.springframework.http.HttpStatus.OK;
 
-@CrossOrigin(origins = GlobalConstant.LOCAL_ENV)
 @RestController
+@CrossOrigin(origins = GlobalConstant.LOCAL_ENV)
 @RequestMapping("/v1/ratings/")
 @Slf4j
-public record RatingResource(ProductService productService,
-                            UserService userService,
-                            Response response,
-                            RatingService ratingService) {
+public class RatingResource {
+    private final ProductService productService;
+    private final UserService userService;
+    private final Response response;
+    private final RatingService ratingService;
 
+    public RatingResource(ProductService productService,
+                          UserService userService,
+                          Response response,
+                          RatingService ratingService) {
+        this.productService = productService;
+        this.userService = userService;
+        this.response = response;
+        this.ratingService = ratingService;
+    }
 
     @PostMapping("/postReview")
     @PreAuthorize("hasAuthority('ROLE_USER')")
