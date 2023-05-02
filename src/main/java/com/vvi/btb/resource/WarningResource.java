@@ -1,5 +1,6 @@
 package com.vvi.btb.resource;
 
+import com.vvi.btb.constant.GlobalConstant;
 import com.vvi.btb.domain.HttpResponse;
 import com.vvi.btb.domain.request.user.UserOTPRequest;
 import com.vvi.btb.domain.response.OTPResponse;
@@ -11,7 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import static org.springframework.http.HttpStatus.OK;
 
-@CrossOrigin("*")
+@CrossOrigin(origins = GlobalConstant.LOCAL_ENV)
 @RestController
 @RequestMapping("/v1/bansaltraders")
 @Slf4j

@@ -1,6 +1,7 @@
 package com.vvi.btb.resource;
 
 import com.vvi.btb.constant.CategoryImplConstant;
+import com.vvi.btb.constant.GlobalConstant;
 import com.vvi.btb.domain.HttpResponse;
 import com.vvi.btb.domain.request.category.CategoryRequest;
 import com.vvi.btb.domain.request.category.CategoryRequests;
@@ -18,19 +19,12 @@ import static com.vvi.btb.constant.CategoryImplConstant.PLEASE_CONTACT_ADMIN;
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
 
-@CrossOrigin("*")
+@CrossOrigin(origins = GlobalConstant.LOCAL_ENV)
 @RestController
 @RequestMapping("/v1/categories")
 @Slf4j
-public class CategoryResource {
-
-    private final CategoryService categoryService;
-    private final Response response;
-
-    public CategoryResource(CategoryService categoryService, Response response) {
-        this.categoryService = categoryService;
-        this.response = response;
-    }
+public record CategoryResource(CategoryService categoryService,
+                               Response response) {
 
     @PostMapping("/createCategory")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")

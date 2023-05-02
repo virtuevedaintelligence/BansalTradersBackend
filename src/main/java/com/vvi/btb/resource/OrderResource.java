@@ -1,5 +1,6 @@
 package com.vvi.btb.resource;
 
+import com.vvi.btb.constant.GlobalConstant;
 import com.vvi.btb.domain.HttpResponse;
 import com.vvi.btb.domain.request.order.OrderRequest;
 import com.vvi.btb.exception.domain.OrderException;
@@ -8,7 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@CrossOrigin("*")
+@CrossOrigin(origins = GlobalConstant.LOCAL_ENV)
 @RestController
 @RequestMapping("/v1/orders")
 @Slf4j

@@ -1,6 +1,7 @@
 package com.vvi.btb.resource;
 
 
+import com.vvi.btb.constant.GlobalConstant;
 import com.vvi.btb.constant.ProductImplConstant;
 import com.vvi.btb.constant.UserImplConstant;
 import com.vvi.btb.domain.HttpResponse;
@@ -27,22 +28,14 @@ import java.util.Optional;
 
 import static org.springframework.http.HttpStatus.*;
 
-@CrossOrigin("*")
+@CrossOrigin(origins = GlobalConstant.LOCAL_ENV)
 @RestController
 @RequestMapping("/v1/products")
 @Slf4j
-public class ProductResource {
-    private final ProductService productService;
-    private final Response response;
-    private final ProductRepository productRepository;
-    private final UserRepository userRepository;
-    public ProductResource(ProductService productService, Response response,
-                           ProductRepository productRepository, UserRepository userRepository) {
-        this.productService = productService;
-        this.response = response;
-        this.productRepository = productRepository;
-        this.userRepository = userRepository;
-    }
+public record ProductResource(ProductService productService,
+                              Response response,
+                              ProductRepository productRepository,
+                              UserRepository userRepository) {
 
     @PostMapping("/createProduct")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")

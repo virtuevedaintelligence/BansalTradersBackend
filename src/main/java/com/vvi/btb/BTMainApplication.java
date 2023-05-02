@@ -13,14 +13,14 @@ public class BTMainApplication {
 		SpringApplication.run(BTMainApplication.class, args);
 	}
 
-	@Bean
-	public WebMvcConfigurer corsConfigurer() {
-		return new WebMvcConfigurer() {
-			@Override
-			public void addCorsMappings(CorsRegistry registry) {
-				registry.addMapping("/*")
-						.allowedOrigins("http://localhost:9000");
-			}
-		};
-	}
+//	@Bean
+//	public WebMvcConfigurer corsConfigurer() {
+//		return new WebMvcConfigurer() {
+//			@Override
+//			public void addCorsMappings(CorsRegistry registry) {
+//				registry.addMapping("/*")
+//						.allowedOrigins("http://localhost:9000");
+//			}
+//		};
+//	}
 }

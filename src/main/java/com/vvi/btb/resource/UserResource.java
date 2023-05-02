@@ -1,5 +1,6 @@
 package com.vvi.btb.resource;
 
+import com.vvi.btb.constant.GlobalConstant;
 import com.vvi.btb.domain.HttpResponse;
 import com.vvi.btb.domain.mapper.user.UserRegisterEntityMapper;
 import com.vvi.btb.domain.mapper.user.UserResponseMapper;
@@ -25,7 +26,7 @@ import java.util.Optional;
 import static com.vvi.btb.constant.UserImplConstant.*;
 import static org.springframework.http.HttpStatus.*;
 
-@CrossOrigin("*")
+@CrossOrigin(origins = GlobalConstant.LOCAL_ENV)
 @RestController
 @RequestMapping("/v1/users")
 @Slf4j
