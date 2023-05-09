@@ -56,7 +56,7 @@ public record ProductServiceImpl(ProductRepository productRepository,
     public boolean saveProducts(ProductRequests productRequests) throws ProductException, CategoryException, IOException {
         List<Product> products = productRequests.getProductRequests()
                 .stream()
-                .map(productEntityMapper::apply)
+                .map(productEntityMapper)
                 .collect(Collectors.toList());
         return productRepository.saveAll(products);
     }
@@ -66,7 +66,7 @@ public record ProductServiceImpl(ProductRepository productRepository,
             throws ProductException, CategoryException {
         try{
             if(productRequest.getWeight() != product.getWeight()){
-                return productResponseMapper.apply(addProductInformation(productRequest, Optional.ofNullable(product)));
+                return productResponseMapper.apply(addProductInformation(productRequest, Optional.of(product)));
             }else {
                 return getProductResponse(productRepository.save(extractedProduct(productRequest, product)));
             }
@@ -98,7 +98,7 @@ public record ProductServiceImpl(ProductRepository productRepository,
     public Optional<ProductResponse> getProductByName(String productName) throws ProductException {
         Optional<Product> product = productRepository.findByProductName(productName);
         if(product.isPresent()){
-            return Optional.ofNullable(productResponseMapper.apply(product.get()));
+            return Optional.of(productResponseMapper.apply(product.get()));
         }
         else {
             log.info(ProductImplConstant.PRODUCT_NOT_FOUND);
@@ -110,7 +110,7 @@ public record ProductServiceImpl(ProductRepository productRepository,
     public Optional<ProductResponse> getProductByNameAndWeight(String productName, int weight) throws ProductException {
         Optional<Product> product = productRepository.findByProductNameAndWeight(productName,weight);
         if(product.isPresent()){
-            return Optional.ofNullable(productResponseMapper.apply(product.get()));
+            return Optional.of(productResponseMapper.apply(product.get()));
         }
         else {
             log.info(ProductImplConstant.PRODUCT_NOT_FOUND);
@@ -122,7 +122,7 @@ public record ProductServiceImpl(ProductRepository productRepository,
     public Optional<ProductResponse> getProductDetail(Long id) {
         Optional<Product> productDetail = productRepository.findById(id);
         if(productDetail.isPresent()){
-          return Optional.ofNullable(getProductResponse(productDetail.get()));
+          return Optional.of(getProductResponse(productDetail.get()));
         }else{
             log.info(ProductImplConstant.PRODUCT_NOT_FOUND);
         }
@@ -132,7 +132,7 @@ public record ProductServiceImpl(ProductRepository productRepository,
     public Optional<ProductResponse> getProductDetailToUpdate(String productName, int weight) {
         Optional<Product> productDetail = productRepository.findByProductNameAndWeight(productName,weight);
         if(productDetail.isPresent()){
-            return Optional.ofNullable(getProductResponse(productDetail.get()));
+            return Optional.of(getProductResponse(productDetail.get()));
         }else{
             log.info(ProductImplConstant.PRODUCT_NOT_FOUND);
         }
