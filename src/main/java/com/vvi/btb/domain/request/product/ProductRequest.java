@@ -14,7 +14,7 @@ public class ProductRequest implements Serializable {
     private int productPriceWithoutDiscount;
     private int quantity; // 10 packets 20 packets
     private int weight; // 250gm 500gm
-    private List<String> featured;
-    private List<String> isactive;
+    private int featured;
+    private int isactive;
     private String categoryName;
 }

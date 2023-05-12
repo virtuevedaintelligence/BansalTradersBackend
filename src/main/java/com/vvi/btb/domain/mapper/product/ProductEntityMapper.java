@@ -54,10 +54,10 @@ public record ProductEntityMapper(CategoryDao categoryDao) implements Function<P
                 .build());
     }
     public boolean setFeatured(ProductRequest productRequest) {
-        return productRequest.getFeatured().get(0).equals(ON) || productRequest.getFeatured().get(0).equals("1");
+        return productRequest.getFeatured() != 0;
     }
 
     public boolean setActive(ProductRequest productRequest){
-        return productRequest.getIsactive().get(0).equals(ON) || productRequest.getIsactive().get(0).equals("1");
+        return productRequest.getIsactive() != 0;
     }
 }
